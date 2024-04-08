@@ -39,7 +39,9 @@ pub(crate) fn define_tensor(input: TokenStream) -> TokenStream {
         Kind: kindle_burn::tensor::TensorKind<Backend>,
     };
     let derive_methods = derive::derive(dim_val, &name, &dims, &impl_generics, &where_clause);
+    let doc = format!(r#"# A {dim_val}-Dimensional Tensor"#);
     quote! {
+        #[doc = #doc]
         #[derive(Debug)]
         #vis struct #name <
             #impl_generics
