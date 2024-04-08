@@ -1,3 +1,0 @@
-*.rs linguist-language=Rust
-*.toml linguist-language=TOML
-*.md linguist-language=Markdown
