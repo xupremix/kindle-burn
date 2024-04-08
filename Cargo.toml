@@ -19,7 +19,51 @@ readme = "README.md"
 license = "MIT or Apache-2.0"
 
 [features]
+default = ["std"]
+
+# doc
+doc = ["kindle-core/doc"]
+
+# stdlib
+std = ["kindle-core/std"]
+
+# Training
+train = ["kindle-core/train"]
+tui = ["kindle-core/tui"]
+metrics = ["kindle-core/metrics"]
+
+# Datasets
+dataset = ["kindle-core/dataset"]
+sqlite = ["kindle-core/sqlite"]
+sqlite-bundled = ["kindle-core/sqlite-bundled"]
+vision = ["kindle-core/vision"]
+
+# Backends
 wgpu = ["kindle-core/wgpu"]
+candle = ["kindle-core/candle"]
+tch = ["kindle-core/tch"]
+ndarray = ["kindle-core/ndarray"]
+
+# Backend specs
+metal = ["kindle-core/metal"]
+# autotune = ["kindle-core/autotune"]
+# template = ["kindle-core/template"]
+cuda = ["kindle-core/cuda"]
+accelerate = ["kindle-core/accelerate"]
+blas-netlib = ["kindle-core/blas-netlib"]
+openblas = ["kindle-core/openblas"]
+openblas-system = ["kindle-core/openblas-system"]
+wasm-sync = ["kindle-core/wasm-sync"]
+
+# Network
+# network = ["kindle-core/network"]
+
+# Backend decorators
+autodiff = ["kindle-core/autodiff"]
+fusion = ["kindle-core/fusion"]
+
+# Experimental
+experimental-named-tensor = ["kindle-core/experimental-named-tensor"]
 
 [dependencies.kindle-core]
 path = "crates/kindle-core"

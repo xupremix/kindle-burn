@@ -8,7 +8,51 @@ version.workspace = true
 readme.workspace = true
 
 [features]
+default = ["std"]
+
+# doc
+doc = ["burn/doc"]
+
+# stdlib
+std = ["burn/std"]
+
+# Training
+train = ["burn/train"]
+tui = ["burn/tui"]
+metrics = ["burn/metrics"]
+
+# Datasets
+dataset = ["burn/dataset"]
+sqlite = ["burn/sqlite"]
+sqlite-bundled = ["burn/sqlite-bundled"]
+vision = ["burn/vision"]
+
+# Backends
 wgpu = ["burn/wgpu"]
+candle = ["burn/candle"]
+tch = ["burn/tch"]
+ndarray = ["burn/ndarray"]
+
+# Backend specs
+cuda = ["burn/cuda"]
+metal = ["burn/metal"]
+# autotune = ["burn/autotune"]
+# template = ["burn/template"]
+accelerate = ["burn/accelerate"]
+blas-netlib = ["burn/blas-netlib"]
+openblas = ["burn/openblas"]
+openblas-system = ["burn/openblas-system"]
+wasm-sync = ["burn/wasm-sync"]
+
+# Backend decorators
+autodiff = ["burn/autodiff"]
+fusion = ["burn/fusion"]
+
+# Network
+# network = ["burn/network"]
+
+# Experimental
+experimental-named-tensor = ["burn/experimental-named-tensor"]
 
 [dependencies]
 kindle-macros = { path = "../kindle-macros" }
