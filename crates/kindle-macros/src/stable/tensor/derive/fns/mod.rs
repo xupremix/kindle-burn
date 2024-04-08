@@ -1,21 +1,31 @@
 use proc_macro2::TokenStream;
 use quote::quote;
 
-pub(crate) fn derive(
-    dim_val: usize,
-    name: &syn::Ident,
-    dims: &[TokenStream],
-    impl_generics: &TokenStream,
-    where_clause: &TokenStream,
-) -> TokenStream {
-    quote! {}
+#[cfg(feature = "autodiff")]
+mod autodiff;
+
+pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) -> TokenStream {
+    let ty_dims = (0..dim_val)
+        .map(|i| {
+            let ident = syn::Ident::new(&format!("DIM_{i}"), proc_macro2::Span::call_site());
+            quote! { #ident }
+        })
+        .collect::<Vec<_>>();
+
+    let mut out: Vec<TokenStream> = vec![];
+
+    #[cfg(feature = "autodiff")]
+    let autodiff = autodiff::derive_autodiff(dim_val, name, dims, &ty_dims);
+
+    #[cfg(feature = "autodiff")]
+    out.push(autodiff);
+
+    quote! {
+        #(#out)*
+    }
 }
 
 /*
-backward
-grad
-grad_remove
-grad_replace
 inner
 from_inner
 new

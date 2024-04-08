@@ -1,13 +1,7 @@
 use proc_macro2::TokenStream;
 use quote::quote;
 
-pub(crate) fn derive(
-    dim_val: usize,
-    name: &syn::Ident,
-    dims: &[TokenStream],
-    impl_generics: &TokenStream,
-    where_clause: &TokenStream,
-) -> TokenStream {
+pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) -> TokenStream {
     quote! {}
 }
 
