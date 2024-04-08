@@ -1,3 +1,8 @@
+#[cfg(feature = "ndarray")]
+mod ndarray;
+#[cfg(feature = "ndarray")]
+pub use ndarray::*;
+
 #[cfg(feature = "candle")]
 mod candle;
 #[cfg(feature = "candle")]
