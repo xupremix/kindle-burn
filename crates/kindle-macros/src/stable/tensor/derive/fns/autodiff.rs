@@ -5,7 +5,7 @@ pub(crate) fn derive_autodiff(
     dim_val: usize,
     name: &syn::Ident,
     dims: &[TokenStream],
-    ty_dims: &Vec<TokenStream>,
+    ty_dims: &[TokenStream],
 ) -> TokenStream {
     quote! {
         impl <
