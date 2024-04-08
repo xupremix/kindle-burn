@@ -32,7 +32,7 @@ impl From<LibTorchCpuDevice> for crate::backend::libtorch::LibTorchDevice {
     }
 }
 impl From<LibTorchMpsDevice> for crate::backend::libtorch::LibTorchDevice {
-    fn from(value: LibTorchMpsDevice) -> Self {
+    fn from(_: LibTorchMpsDevice) -> Self {
         Self::Mps
     }
 }
@@ -54,7 +54,7 @@ impl From<&LibTorchCpuDevice> for crate::backend::libtorch::LibTorchDevice {
     }
 }
 impl From<&LibTorchMpsDevice> for crate::backend::libtorch::LibTorchDevice {
-    fn from(value: &LibTorchMpsDevice) -> Self {
+    fn from(_: &LibTorchMpsDevice) -> Self {
         Self::Mps
     }
 }
