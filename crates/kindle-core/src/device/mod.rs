@@ -1,4 +1,7 @@
-use crate::tensor::{backend::Backend, Device};
+#[cfg(feature = "wgpu")]
+mod wgpu;
+#[cfg(feature = "wgpu")]
+pub use wgpu::*;
 
-pub trait KindleDevice<B: Backend> {}
-impl<B: Backend> KindleDevice<B> for Device<B> {}
+#[allow(private_bounds)]
+pub trait KindleDevice: crate::Sealed {}
