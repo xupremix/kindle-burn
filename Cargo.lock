@@ -1842,6 +1842,7 @@ version = "0.1.0"
 dependencies = [
  "burn",
  "kindle-macros",
+ "serde",
 ]
 
 [[package]]

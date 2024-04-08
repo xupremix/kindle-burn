@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+
 #[cfg(feature = "ndarray")]
 mod ndarray;
 #[cfg(feature = "ndarray")]
@@ -19,4 +21,18 @@ mod wgpu;
 pub use wgpu::*;
 
 #[allow(private_bounds)]
-pub trait KindleDevice: crate::Sealed {}
+pub trait KindleDevice<'a>:
+    crate::Sealed
+    + core::fmt::Debug
+    + Copy
+    + Clone
+    + 'static
+    + Sized
+    + Eq
+    + PartialEq
+    + Serialize
+    + Deserialize<'a>
+    + Send
+    + Sync
+{
+}

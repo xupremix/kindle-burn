@@ -58,3 +58,4 @@ experimental-named-tensor = ["burn/experimental-named-tensor"]
 [dependencies]
 kindle-macros = { path = "../kindle-macros" }
 burn = { workspace = true }
+serde = { workspace = true}
