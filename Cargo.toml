@@ -1,0 +1,36 @@
+[workspace]
+resolver = "2"
+members = [
+	"crates/*",
+	"examples/*",
+]
+
+[workspace.package]
+edition = "2021"
+version = "0.1.0"
+readme = "README.md"
+license = "MIT or Apache-2.0"
+
+[package]
+name = "kindle-burn"
+version = "0.1.0"
+edition = "2021"
+readme = "README.md"
+license = "MIT or Apache-2.0"
+
+[features]
+wgpu = ["kindle-core/wgpu"]
+
+[dependencies.kindle-core]
+path = "crates/kindle-core"
+version = "0.1.0"
+
+[workspace.dependencies]
+proc-macro2 = "1.0.79"
+quote = "1.0.35"
+syn = {version = "2.0.55", features = ["full"]}
+darling = "0.20.8"
+
+# others
+burn = "0.12.1"
+trybuild = "1.0.91"

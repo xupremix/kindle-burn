@@ -1,0 +1,15 @@
+[package]
+name = "kindle-core"
+description = "Core crate for Kindle-Burn"
+authors = ["xupremix <xupremix.me@gmail.com>"]
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+readme.workspace = true
+
+[features]
+wgpu = ["burn/wgpu"]
+
+[dependencies]
+kindle-macros = { path = "../kindle-macros" }
+burn = { workspace = true }
