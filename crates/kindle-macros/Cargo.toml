@@ -7,6 +7,9 @@ license.workspace = true
 version.workspace = true
 readme.workspace = true
 
+[features]
+nightly = []
+
 [lib]
 proc-macro = true
 

@@ -1,8 +1,15 @@
 use proc_macro::TokenStream;
 
+#[cfg(feature = "nightly")]
 mod nightly;
+
+#[cfg(not(feature = "nightly"))]
 mod stable;
 
+#[cfg(feature = "nightly")]
+use nightly as macros;
+
+#[cfg(not(feature = "nightly"))]
 use stable as macros;
 
 #[proc_macro]

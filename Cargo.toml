@@ -20,6 +20,7 @@ license = "MIT or Apache-2.0"
 
 [features]
 default = ["std"]
+nightly = ["kindle-core/nightly"]
 
 # doc
 doc = ["kindle-core/doc"]
@@ -73,8 +74,8 @@ version = "0.1.0"
 proc-macro2 = "1.0.79"
 quote = "1.0.35"
 syn = {version = "2.0.55", features = ["full"]}
-darling = "0.20.8"
+burn = "0.12.1"
 
 # others
-burn = "0.12.1"
+darling = "0.20.8"
 trybuild = "1.0.91"

@@ -1,14 +1,14 @@
-pub struct WgpuDiscreteGpuDevice<const T: usize>;
-impl<const T: usize> crate::Sealed for WgpuDiscreteGpuDevice<T> {}
-impl<const T: usize> crate::device::KindleDevice for WgpuDiscreteGpuDevice<T> {}
+pub struct WgpuDiscreteGpuDevice<const N: usize>;
+impl<const N: usize> crate::Sealed for WgpuDiscreteGpuDevice<N> {}
+impl<const N: usize> crate::device::KindleDevice for WgpuDiscreteGpuDevice<N> {}
 
-pub struct WgpuIntegratedGpuDevice<const T: usize>;
-impl<const T: usize> crate::Sealed for WgpuIntegratedGpuDevice<T> {}
-impl<const T: usize> crate::device::KindleDevice for WgpuIntegratedGpuDevice<T> {}
+pub struct WgpuIntegratedGpuDevice<const N: usize>;
+impl<const N: usize> crate::Sealed for WgpuIntegratedGpuDevice<N> {}
+impl<const N: usize> crate::device::KindleDevice for WgpuIntegratedGpuDevice<N> {}
 
-pub struct WgpuVirtualGpuDevice<const T: usize>;
-impl<const T: usize> crate::Sealed for WgpuVirtualGpuDevice<T> {}
-impl<const T: usize> crate::device::KindleDevice for WgpuVirtualGpuDevice<T> {}
+pub struct WgpuVirtualGpuDevice<const N: usize>;
+impl<const N: usize> crate::Sealed for WgpuVirtualGpuDevice<N> {}
+impl<const N: usize> crate::device::KindleDevice for WgpuVirtualGpuDevice<N> {}
 
 pub struct WgpuCpuDevice;
 impl crate::Sealed for WgpuCpuDevice {}
@@ -18,21 +18,22 @@ pub struct WgpuBestAvailableDevice;
 impl crate::Sealed for WgpuBestAvailableDevice {}
 impl crate::device::KindleDevice for WgpuBestAvailableDevice {}
 
-impl<const T: usize> From<WgpuDiscreteGpuDevice<T>> for crate::backend::wgpu::WgpuDevice {
-    fn from(_: WgpuDiscreteGpuDevice<T>) -> Self {
-        Self::DiscreteGpu(T)
+// Taking ownership
+impl<const N: usize> From<WgpuDiscreteGpuDevice<N>> for crate::backend::wgpu::WgpuDevice {
+    fn from(_: WgpuDiscreteGpuDevice<N>) -> Self {
+        Self::DiscreteGpu(N)
     }
 }
 
-impl<const T: usize> From<WgpuIntegratedGpuDevice<T>> for crate::backend::wgpu::WgpuDevice {
-    fn from(_: WgpuIntegratedGpuDevice<T>) -> Self {
-        Self::IntegratedGpu(T)
+impl<const N: usize> From<WgpuIntegratedGpuDevice<N>> for crate::backend::wgpu::WgpuDevice {
+    fn from(_: WgpuIntegratedGpuDevice<N>) -> Self {
+        Self::IntegratedGpu(N)
     }
 }
 
-impl<const T: usize> From<WgpuVirtualGpuDevice<T>> for crate::backend::wgpu::WgpuDevice {
-    fn from(_: WgpuVirtualGpuDevice<T>) -> Self {
-        Self::VirtualGpu(T)
+impl<const N: usize> From<WgpuVirtualGpuDevice<N>> for crate::backend::wgpu::WgpuDevice {
+    fn from(_: WgpuVirtualGpuDevice<N>) -> Self {
+        Self::VirtualGpu(N)
     }
 }
 
@@ -44,6 +45,37 @@ impl From<WgpuCpuDevice> for crate::backend::wgpu::WgpuDevice {
 
 impl From<WgpuBestAvailableDevice> for crate::backend::wgpu::WgpuDevice {
     fn from(_: WgpuBestAvailableDevice) -> Self {
+        Self::BestAvailable
+    }
+}
+
+// Not taking ownershp
+impl<const N: usize> From<&WgpuDiscreteGpuDevice<N>> for crate::backend::wgpu::WgpuDevice {
+    fn from(_: &WgpuDiscreteGpuDevice<N>) -> Self {
+        Self::DiscreteGpu(N)
+    }
+}
+
+impl<const N: usize> From<&WgpuIntegratedGpuDevice<N>> for crate::backend::wgpu::WgpuDevice {
+    fn from(_: &WgpuIntegratedGpuDevice<N>) -> Self {
+        Self::IntegratedGpu(N)
+    }
+}
+
+impl<const N: usize> From<&WgpuVirtualGpuDevice<N>> for crate::backend::wgpu::WgpuDevice {
+    fn from(_: &WgpuVirtualGpuDevice<N>) -> Self {
+        Self::VirtualGpu(N)
+    }
+}
+
+impl From<&WgpuCpuDevice> for crate::backend::wgpu::WgpuDevice {
+    fn from(_: &WgpuCpuDevice) -> Self {
+        Self::Cpu
+    }
+}
+
+impl From<&WgpuBestAvailableDevice> for crate::backend::wgpu::WgpuDevice {
+    fn from(_: &WgpuBestAvailableDevice) -> Self {
         Self::BestAvailable
     }
 }
