@@ -19,6 +19,12 @@ macro_rules! wgpu_device {
             _int_element: std::marker::PhantomData<IntElement>,
         }
 
+    };
+}
+
+#[cfg(not(feature = "autodiff"))]
+macro_rules! impl_device {
+    ($device:ident, $device_variant:ident $(,$n:ident)?) => {
         impl<
             $(const $n: usize,)?
             GraphicsApi,
@@ -43,3 +49,12 @@ wgpu_device!(WgpuBestAvailableDevice, BestAvailable);
 wgpu_device!(WgpuIntegratedGpuDevice, IntegratedGpu, N);
 wgpu_device!(WgpuVirtualGpuDevice, VirtualGpu, N);
 wgpu_device!(WgpuCpuDevice, Cpu);
+
+#[cfg(not(feature = "autodiff"))]
+impl_device!(WgpuBestAvailableDevice, BestAvailable);
+#[cfg(not(feature = "autodiff"))]
+impl_device!(WgpuIntegratedGpuDevice, IntegratedGpu, N);
+#[cfg(not(feature = "autodiff"))]
+impl_device!(WgpuVirtualGpuDevice, VirtualGpu, N);
+#[cfg(not(feature = "autodiff"))]
+impl_device!(WgpuCpuDevice, Cpu);
