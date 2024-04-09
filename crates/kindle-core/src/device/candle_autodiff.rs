@@ -5,7 +5,7 @@ macro_rules! impl_device {
                 crate::backend::Autodiff<
                     crate::backend::Candle,
                 >
-            > for $device $(<$n>)?
+            > for crate::device::$device $(<$n>)?
         {
             fn to_device() -> crate::backend::candle::CandleDevice {
                 crate::backend::candle::CandleDevice::$device_variant $(($n))?
