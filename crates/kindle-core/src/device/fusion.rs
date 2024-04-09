@@ -10,10 +10,29 @@ where
     _backend: std::marker::PhantomData<Backend>,
 }
 
-#[cfg(feature = "wgpu")]
+#[cfg(all(feature = "wgpu", not(feature = "autodiff")))]
 impl<Device, GraphicsApi, FloatElement, IntElement>
     crate::device::KindleDevice<
         crate::backend::Fusion<crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>,
+    > for KindleFusionDevice<Device, crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>
+where
+    Device:
+        crate::device::KindleDevice<crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>,
+    GraphicsApi: crate::backend::wgpu::GraphicsApi,
+    FloatElement: crate::backend::wgpu::FloatElement,
+    IntElement: crate::backend::wgpu::IntElement,
+{
+    fn to_device() -> <crate::backend::Fusion<crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>> as burn::tensor::backend::Backend>::Device{
+        Device::to_device()
+    }
+}
+
+#[cfg(all(feature = "wgpu", feature = "autodiff"))]
+impl<Device, GraphicsApi, FloatElement, IntElement>
+    crate::device::KindleDevice<
+        crate::backend::Autodiff<
+            crate::backend::Fusion<crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>,
+        >,
     > for KindleFusionDevice<Device, crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>
 where
     Device:
