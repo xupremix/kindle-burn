@@ -27,7 +27,7 @@ pub(crate) fn define_tensor(input: TokenStream) -> TokenStream {
         })
         .collect::<Vec<_>>();
     let impl_generics = quote! {
-        'dv,
+        // 'dv,
         Backend,
         Device,
         #(#dims),*,
@@ -35,7 +35,7 @@ pub(crate) fn define_tensor(input: TokenStream) -> TokenStream {
     };
     let where_clause = quote! {
         Backend: kindle_burn::tensor::backend::Backend,
-        Device: kindle_burn::device::KindleDevice<'dv, Backend>,
+        Device: kindle_burn::device::KindleDevice</*'dv,*/ Backend>,
         Kind: kindle_burn::tensor::TensorKind<Backend>,
     };
     let derive_methods = derive::derive(dim_val, &name, &dims);
@@ -53,7 +53,7 @@ pub(crate) fn define_tensor(input: TokenStream) -> TokenStream {
                 #dim,
                 Kind,
             >,
-            _device: std::marker::PhantomData<&'dv Device>,
+            _device: std::marker::PhantomData</*&'dv */Device>,
         }
         #derive_methods
     }

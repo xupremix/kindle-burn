@@ -4,9 +4,9 @@ macro_rules! tch_device {
     ($device:ident, $device_variant:ident $(,$n:ident)?) => {
         #[derive(Debug, Clone, Serialize, Deserialize)]
         pub struct $device $(<const $n: usize>)?;
-        impl<'dv, $(const $n: usize,)? Element>
+        impl</*'dv,*/ $(const $n: usize,)? Element>
             crate::device::KindleDevice<
-                'dv,
+                // 'dv,
                 crate::backend::LibTorch<Element>,
             > for $device $(<$n>)?
         where

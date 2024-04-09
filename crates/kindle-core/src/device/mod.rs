@@ -35,8 +35,8 @@ pub use fusion::*;
 #[cfg(all(feature = "fusion", feature = "autodiff"))]
 mod fusion_autodiff;
 
-pub trait KindleDevice<'dv, Backend>:
-    core::fmt::Debug + Clone + 'static + Sized + Serialize + Deserialize<'dv> + Send + Sync
+pub trait KindleDevice<Backend>:
+    core::fmt::Debug + Clone + 'static + Sized + Serialize + Deserialize<'static> + Send + Sync
 where
     Backend: crate::tensor::backend::Backend,
 {

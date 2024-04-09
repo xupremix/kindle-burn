@@ -4,9 +4,9 @@ macro_rules! wgpu_device {
     ($device:ident, $device_variant:ident $(,$n:ident)?) => {
         #[derive(Debug, Clone, Serialize, Deserialize)]
         pub struct $device $(<const $n: usize>)?;
-        impl<'dv, $(const $n: usize,)? GraphicsApi, FloatElement, IntElement>
+        impl</*'dv,*/ $(const $n: usize,)? GraphicsApi, FloatElement, IntElement>
             crate::device::KindleDevice<
-                'dv,
+                // 'dv,
                 crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>,
             > for $device $(<$n>)?
         where

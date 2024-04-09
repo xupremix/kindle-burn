@@ -9,19 +9,19 @@ pub(crate) fn derive_autodiff(
 ) -> TokenStream {
     quote! {
         impl <
-            'dv,
+            // 'dv,
             Backend,
             Device,
             #(#dims),*
         > #name <
-            'dv,
+            // 'dv,
             Backend,
             Device,
             #(#ty_dims),*,
             kindle_burn::tensor::Float,
         > where
             Backend: kindle_burn::tensor::backend::AutodiffBackend,
-            Device: kindle_burn::device::KindleDevice<'dv, Backend>,
+            Device: kindle_burn::device::KindleDevice</*'dv,*/ Backend>,
         {
             /// Perform the backward pass of the tensor.
             pub fn backward(&self) -> <Backend as kindle_burn::tensor::backend::AutodiffBackend>::Gradients {
@@ -33,7 +33,7 @@ pub(crate) fn derive_autodiff(
                 grads: &<Backend as kindle_burn::tensor::backend::AutodiffBackend>::Gradients,
             ) -> Option<
                 #name<
-                    'dv,
+                    // 'dv,
                     <Backend as kindle_burn::tensor::backend::AutodiffBackend>::InnerBackend,
                     Device,
                     #(#ty_dims),*,
@@ -54,7 +54,7 @@ pub(crate) fn derive_autodiff(
                 grads: &mut <Backend as kindle_burn::tensor::backend::AutodiffBackend>::Gradients,
             ) -> Option<
                 #name<
-                    'dv,
+                    // 'dv,
                     <Backend as kindle_burn::tensor::backend::AutodiffBackend>::InnerBackend,
                     Device,
                     #(#ty_dims),*,
@@ -74,7 +74,7 @@ pub(crate) fn derive_autodiff(
                 &self,
                 grads: &mut <Backend as kindle_burn::tensor::backend::AutodiffBackend>::Gradients,
                 grad: #name <
-                    'dv,
+                    // 'dv,
                     <Backend as kindle_burn::tensor::backend::AutodiffBackend>::InnerBackend,
                     Device,
                     #(#ty_dims),*,
@@ -89,25 +89,25 @@ pub(crate) fn derive_autodiff(
         }
 
         impl <
-            'dv,
+            // 'dv,
             Backend,
             Device,
             #(#dims),*,
             Kind,
         > #name <
-            'dv,
+            // 'dv,
             Backend,
             Device,
             #(#ty_dims),*,
             Kind,
         > where
             Backend: kindle_burn::tensor::backend::AutodiffBackend,
-            Device: kindle_burn::device::KindleDevice<'dv, Backend>,
+            Device: kindle_burn::device::KindleDevice</*'dv,*/ Backend>,
             Kind: kindle_burn::tensor::BasicAutodiffOps<Backend>,
         {
             /// Inner tensor without the autodiff
             pub fn inner(self) -> #name <
-                'dv,
+                // 'dv,
                 <Backend as kindle_burn::tensor::backend::AutodiffBackend>::InnerBackend,
                 Device,
                 #(#ty_dims),*,
@@ -121,7 +121,7 @@ pub(crate) fn derive_autodiff(
             /// Convert a tensor to the autodiff backend
             pub fn from_inner(
                 inner: #name <
-                    'dv,
+                    // 'dv,
                     <Backend as kindle_burn::tensor::backend::AutodiffBackend>::InnerBackend,
                     Device,
                     #(#ty_dims),*,
