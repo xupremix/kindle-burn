@@ -24,6 +24,15 @@ fn main() {
         _device: std::marker::PhantomData,
     };
 
+    // let t_gpu: Tensor3<Wgpu, WgpuBestAvailableDevice, 2, 2, 2, kindle_burn::tensor::Float> =
+    //     Tensor3 {
+    //         tensor: kindle_burn::tensor::Tensor::<Wgpu, 3>::zeros(
+    //             Shape::new([2; 3]),
+    //             &WgpuBestAvailableDevice::<AutoGraphicsApi, f32, i32>::to_device(),
+    //         ),
+    //         _device: std::marker::PhantomData,
+    //     };
+
     // let t = kindle_burn::tensor::Tensor::<Autodiff<Wgpu>, 3>::zeros(
     //     Shape::new([2; 3]),
     //     &Default::default(),

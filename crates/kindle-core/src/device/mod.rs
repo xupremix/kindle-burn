@@ -4,8 +4,6 @@ use serde::{Deserialize, Serialize};
 mod ndarray;
 #[cfg(feature = "ndarray")]
 pub use ndarray::*;
-#[cfg(all(feature = "ndarray", feature = "autodiff"))]
-mod ndarray_autodiff;
 
 #[cfg(feature = "candle")]
 mod candle;

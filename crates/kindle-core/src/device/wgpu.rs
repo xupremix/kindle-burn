@@ -18,7 +18,6 @@ macro_rules! wgpu_device {
             _float_element: std::marker::PhantomData<FloatElement>,
             _int_element: std::marker::PhantomData<IntElement>,
         }
-
     };
 }
 
