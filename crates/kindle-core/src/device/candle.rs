@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 macro_rules! candle_device {
     ($device:ident, $device_variant:ident $(,$n:ident)?) => {
-        #[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
+        #[derive(Debug, Clone, Serialize, Deserialize)]
         pub struct $device $(<const $n: usize>)?;
         impl<'dv, $(const $n: usize,)?>
             crate::device::KindleDevice<
@@ -10,24 +10,15 @@ macro_rules! candle_device {
                 crate::backend::Candle,
             > for $device $(<$n>)?
         {
-        }
-        impl $(<const $n: usize>)? From<$device $(<$n>)?>
-            for crate::backend::candle::CandleDevice {
-            fn from(_: $device $(<$n>)?) -> Self {
-                Self::$device_variant $(($n))?
-            }
-        }
-        impl $(<const $n: usize>)? From<&$device $(<$n>)?>
-            for crate::backend::candle::CandleDevice {
-            fn from(_: &$device $(<$n>)?) -> Self {
-                Self::$device_variant $(($n))?
+            fn to_device() -> crate::backend::candle::CandleDevice {
+                crate::backend::candle::CandleDevice::$device_variant $(($n))?
             }
         }
     };
 }
 
 candle_device!(CandleCudaDevice, Cuda, N);
-candle_device!(CandleCpuDevice, Cpu);
 candle_device!(CandleMetalDevice, Metal, N);
+candle_device!(CandleCpuDevice, Cpu);
 
 // Look into changing to a pub visibility identifier for CandleFloatElement and CandleIntElement

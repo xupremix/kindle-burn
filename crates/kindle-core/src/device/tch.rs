@@ -2,25 +2,18 @@ use serde::{Deserialize, Serialize};
 
 macro_rules! tch_device {
     ($device:ident, $device_variant:ident $(,$n:ident)?) => {
-        #[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
+        #[derive(Debug, Clone, Serialize, Deserialize)]
         pub struct $device $(<const $n: usize>)?;
         impl<'dv, $(const $n: usize,)? Element>
             crate::device::KindleDevice<
                 'dv,
                 crate::backend::LibTorch<Element>,
             > for $device $(<$n>)?
+        where
+            Element: crate::backend::libtorch::TchElement,
         {
-        }
-        impl $(<const $n: usize>)? From<$device $(<$n>)?>
-            for crate::backend::libtorch::LibTorchDevice {
-            fn from(_: $device $(<$n>)?) -> Self {
-                Self::$device_variant $(($n))?
-            }
-        }
-        impl $(<const $n: usize>)? From<&$device $(<$n>)?>
-            for crate::backend::libtorch::LibTorchDevice {
-            fn from(_: &$device $(<$n>)?) -> Self {
-                Self::$device_variant $(($n))?
+            fn to_device() -> crate::backend::libtorch::LibTorchDevice {
+                crate::backend::libtorch::LibTorchDevice::$device_variant $(($n))?
             }
         }
     };

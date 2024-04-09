@@ -36,19 +36,9 @@ pub use fusion::*;
 mod fusion_autodiff;
 
 pub trait KindleDevice<'dv, Backend>:
-    core::fmt::Debug
-    + Copy
-    + Clone
-    + 'static
-    + Sized
-    + Eq
-    + PartialEq
-    + Serialize
-    + Deserialize<'dv>
-    + Send
-    + Sync
-    + Into<Backend::Device>
+    core::fmt::Debug + Clone + 'static + Sized + Serialize + Deserialize<'dv> + Send + Sync
 where
     Backend: crate::tensor::backend::Backend,
 {
+    fn to_device() -> Backend::Device;
 }

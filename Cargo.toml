@@ -61,7 +61,7 @@ wasm-sync = ["kindle-core/wasm-sync"]
 
 # Backend decorators
 autodiff = ["kindle-core/autodiff"]
-fusion = ["kindle-core/fusion"]
+fusion = ["kindle-core/fusion", "wgpu"]
 
 # Experimental
 experimental-named-tensor = ["kindle-core/experimental-named-tensor"]

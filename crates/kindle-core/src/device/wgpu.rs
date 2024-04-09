@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 macro_rules! wgpu_device {
     ($device:ident, $device_variant:ident $(,$n:ident)?) => {
-        #[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize)]
+        #[derive(Debug, Clone, Serialize, Deserialize)]
         pub struct $device $(<const $n: usize>)?;
         impl<'dv, $(const $n: usize,)? GraphicsApi, FloatElement, IntElement>
             crate::device::KindleDevice<
@@ -14,23 +14,14 @@ macro_rules! wgpu_device {
             FloatElement: crate::backend::wgpu::FloatElement,
             IntElement: crate::backend::wgpu::IntElement,
         {
-        }
-        impl $(<const $n: usize>)? From<$device $(<$n>)?>
-            for crate::backend::wgpu::WgpuDevice {
-            fn from(_: $device $(<$n>)?) -> Self {
-                Self::$device_variant $(($n))?
-            }
-        }
-        impl $(<const $n: usize>)? From<&$device $(<$n>)?>
-            for crate::backend::wgpu::WgpuDevice {
-            fn from(_: &$device $(<$n>)?) -> Self {
-                Self::$device_variant $(($n))?
+            fn to_device() -> crate::backend::wgpu::WgpuDevice {
+                crate::backend::wgpu::WgpuDevice::$device_variant $(($n))?
             }
         }
     };
 }
 
+wgpu_device!(WgpuBestAvailableDevice, BestAvailable);
 wgpu_device!(WgpuIntegratedGpuDevice, IntegratedGpu, N);
 wgpu_device!(WgpuVirtualGpuDevice, VirtualGpu, N);
 wgpu_device!(WgpuCpuDevice, Cpu);
-wgpu_device!(WgpuBestAvailableDevice, BestAvailable);
