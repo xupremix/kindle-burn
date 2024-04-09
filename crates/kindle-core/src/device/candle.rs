@@ -4,9 +4,8 @@ macro_rules! candle_device {
     ($device:ident, $device_variant:ident $(,$n:ident)?) => {
         #[derive(Debug, Clone, Serialize, Deserialize)]
         pub struct $device $(<const $n: usize>)?;
-        impl</*'dv,*/ $(const $n: usize,)?>
+        impl<$(const $n: usize,)?>
             crate::device::KindleDevice<
-                // 'dv,
                 crate::backend::Candle,
             > for $device $(<$n>)?
         {

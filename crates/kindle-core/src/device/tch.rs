@@ -3,12 +3,22 @@ use serde::{Deserialize, Serialize};
 macro_rules! tch_device {
     ($device:ident, $device_variant:ident $(,$n:ident)?) => {
         #[derive(Debug, Clone, Serialize, Deserialize)]
-        pub struct $device $(<const $n: usize>)?;
-        impl</*'dv,*/ $(const $n: usize,)? Element>
-            crate::device::KindleDevice<
-                // 'dv,
+        pub struct $device <
+            $(const $n: usize,)?
+            Element = f32,
+        >
+        where
+            Element: crate::backend::libtorch::TchElement,
+        {
+            _element: std::marker::PhantomData<Element>,
+        }
+
+        impl<
+            $(const $n: usize,)?
+            Element
+        >   crate::device::KindleDevice<
                 crate::backend::LibTorch<Element>,
-            > for $device $(<$n>)?
+            > for $device <$($n,)? Element>
         where
             Element: crate::backend::libtorch::TchElement,
         {

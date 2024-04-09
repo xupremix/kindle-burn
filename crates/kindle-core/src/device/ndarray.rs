@@ -1,9 +1,14 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Copy, Clone, Serialize, Deserialize)]
-pub struct NdArrayCpuDevice;
-impl</*'dv,*/ Element> crate::device::KindleDevice</*'dv,*/ crate::backend::NdArray<Element>>
-    for NdArrayCpuDevice
+pub struct NdArrayCpuDevice<Element>
+where
+    Element: crate::backend::ndarray::FloatNdArrayElement,
+{
+    _element: std::marker::PhantomData<Element>,
+}
+impl<Element> crate::device::KindleDevice<crate::backend::NdArray<Element>>
+    for NdArrayCpuDevice<Element>
 where
     Element: crate::backend::ndarray::FloatNdArrayElement,
 {

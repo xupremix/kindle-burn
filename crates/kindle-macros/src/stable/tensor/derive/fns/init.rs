@@ -9,20 +9,18 @@ pub(crate) fn derive_init(
 ) -> TokenStream {
     quote! {
         impl <
-            // 'dv,
             Backend,
             Device,
             #(#dims),*,
             Kind,
         > #name <
-            // 'dv,
             Backend,
             Device,
             #(#ty_dims),*,
             Kind,
         > where
             Backend: kindle_burn::tensor::backend::Backend,
-            Device: kindle_burn::device::KindleDevice</*'dv,*/ Backend>,
+            Device: kindle_burn::device::KindleDevice<Backend>,
             Kind: kindle_burn::tensor::BasicOps<Backend>,
         {
             /// Empty tensor.

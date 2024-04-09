@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 pub struct KindleFusionDevice<Device, Backend>
 where
     Backend: burn_fusion::FusionBackend,
-    Device: crate::device::KindleDevice</*'static,*/ Backend>,
+    Device: crate::device::KindleDevice<Backend>,
 {
     _device: std::marker::PhantomData<Device>,
     _backend: std::marker::PhantomData<Backend>,
@@ -13,14 +13,11 @@ where
 #[cfg(feature = "wgpu")]
 impl<Device, GraphicsApi, FloatElement, IntElement>
     crate::device::KindleDevice<
-        // 'static,
         crate::backend::Fusion<crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>,
     > for KindleFusionDevice<Device, crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>
 where
-    Device: crate::device::KindleDevice<
-        // 'static,
-        crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>,
-    >,
+    Device:
+        crate::device::KindleDevice<crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>,
     GraphicsApi: crate::backend::wgpu::GraphicsApi,
     FloatElement: crate::backend::wgpu::FloatElement,
     IntElement: crate::backend::wgpu::IntElement,

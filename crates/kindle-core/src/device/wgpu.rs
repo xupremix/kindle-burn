@@ -3,12 +3,30 @@ use serde::{Deserialize, Serialize};
 macro_rules! wgpu_device {
     ($device:ident, $device_variant:ident $(,$n:ident)?) => {
         #[derive(Debug, Clone, Serialize, Deserialize)]
-        pub struct $device $(<const $n: usize>)?;
-        impl</*'dv,*/ $(const $n: usize,)? GraphicsApi, FloatElement, IntElement>
-            crate::device::KindleDevice<
-                // 'dv,
+        pub struct $device <
+            $(const $n: usize,)?
+            GraphicsApi = crate::backend::wgpu::AutoGraphicsApi,
+            FloatElement = f32,
+            IntElement = i32,
+        >
+        where
+            GraphicsApi: crate::backend::wgpu::GraphicsApi,
+            FloatElement: crate::backend::wgpu::FloatElement,
+            IntElement: crate::backend::wgpu::IntElement,
+        {
+            _graphics_api: std::marker::PhantomData<GraphicsApi>,
+            _float_element: std::marker::PhantomData<FloatElement>,
+            _int_element: std::marker::PhantomData<IntElement>,
+        }
+
+        impl<
+            $(const $n: usize,)?
+            GraphicsApi,
+            FloatElement,
+            IntElement
+        >   crate::device::KindleDevice<
                 crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>,
-            > for $device $(<$n>)?
+            > for $device <$($n,)? GraphicsApi, FloatElement, IntElement>
         where
             GraphicsApi: crate::backend::wgpu::GraphicsApi,
             FloatElement: crate::backend::wgpu::FloatElement,
