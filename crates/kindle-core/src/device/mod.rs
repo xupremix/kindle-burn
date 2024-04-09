@@ -4,26 +4,39 @@ use serde::{Deserialize, Serialize};
 mod ndarray;
 #[cfg(feature = "ndarray")]
 pub use ndarray::*;
+#[cfg(all(feature = "ndarray", feature = "autodiff"))]
+mod ndarray_autodiff;
 
 #[cfg(feature = "candle")]
 mod candle;
 #[cfg(feature = "candle")]
 pub use candle::*;
+#[cfg(all(feature = "candle", feature = "autodiff"))]
+mod candle_autodiff;
 
 #[cfg(feature = "tch")]
 mod tch;
 #[cfg(feature = "tch")]
 pub use tch::*;
+#[cfg(all(feature = "tch", feature = "autodiff"))]
+mod tch_autodiff;
 
 #[cfg(feature = "wgpu")]
 mod wgpu;
 #[cfg(feature = "wgpu")]
 pub use wgpu::*;
+#[cfg(all(feature = "wgpu", feature = "autodiff"))]
+mod wgpu_autodiff;
 
-#[allow(private_bounds)]
-pub trait KindleDevice<'a>:
-    crate::Sealed
-    + core::fmt::Debug
+#[cfg(feature = "fusion")]
+mod fusion;
+#[cfg(feature = "fusion")]
+pub use fusion::*;
+#[cfg(all(feature = "fusion", feature = "autodiff"))]
+mod fusion_autodiff;
+
+pub trait KindleDevice<'dv, Backend>:
+    core::fmt::Debug
     + Copy
     + Clone
     + 'static
@@ -31,8 +44,11 @@ pub trait KindleDevice<'a>:
     + Eq
     + PartialEq
     + Serialize
-    + Deserialize<'a>
+    + Deserialize<'dv>
     + Send
     + Sync
+    + Into<Backend::Device>
+where
+    Backend: crate::tensor::backend::Backend,
 {
 }

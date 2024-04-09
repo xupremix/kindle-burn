@@ -4,6 +4,8 @@ use quote::quote;
 #[cfg(feature = "autodiff")]
 mod autodiff;
 
+mod init;
+
 pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) -> TokenStream {
     let ty_dims = (0..dim_val)
         .map(|i| {
@@ -16,9 +18,9 @@ pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) ->
 
     #[cfg(feature = "autodiff")]
     {
-        let autodiff_derive = autodiff::derive_autodiff(dim_val, name, dims, &ty_dims);
-        out.push(autodiff_derive);
+        out.push(autodiff::derive_autodiff(dim_val, name, dims, &ty_dims));
     }
+    out.push(init::derive_init(dim_val, name, dims, &ty_dims));
 
     quote! {
         #(#out)*
@@ -26,12 +28,10 @@ pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) ->
 }
 
 /*
-inner
-from_inner
-new
-into_primitive
-from_primitive
 empty
+zeros
+ones
+
 dims
 shape
 reshape
@@ -102,8 +102,6 @@ div_scalar
 mul
 mul_scalar
 neg
-zeros
-ones
 full
 mean
 sum
@@ -143,4 +141,8 @@ powf_scalar
 powi
 powiscalar
 diagonal
+
+new
+into_primitive
+from_primitive
 * */

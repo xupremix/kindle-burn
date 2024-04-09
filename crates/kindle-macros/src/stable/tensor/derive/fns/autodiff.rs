@@ -21,7 +21,7 @@ pub(crate) fn derive_autodiff(
             kindle_burn::tensor::Float,
         > where
             Backend: kindle_burn::tensor::backend::AutodiffBackend,
-            Device: kindle_burn::device::KindleDevice<'dv>,
+            Device: kindle_burn::device::KindleDevice<'dv, Backend>,
         {
             /// Perform the backward pass of the tensor.
             pub fn backward(&self) -> <Backend as kindle_burn::tensor::backend::AutodiffBackend>::Gradients {
@@ -102,7 +102,7 @@ pub(crate) fn derive_autodiff(
             Kind,
         > where
             Backend: kindle_burn::tensor::backend::AutodiffBackend,
-            Device: kindle_burn::device::KindleDevice<'dv>,
+            Device: kindle_burn::device::KindleDevice<'dv, Backend>,
             Kind: kindle_burn::tensor::BasicAutodiffOps<Backend>,
         {
             /// Inner tensor without the autodiff
