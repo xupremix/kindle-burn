@@ -15,10 +15,10 @@ pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) ->
     let mut out: Vec<TokenStream> = vec![];
 
     #[cfg(feature = "autodiff")]
-    let autodiff = autodiff::derive_autodiff(dim_val, name, dims, &ty_dims);
-
-    #[cfg(feature = "autodiff")]
-    out.push(autodiff);
+    {
+        let autodiff_derive = autodiff::derive_autodiff(dim_val, name, dims, &ty_dims);
+        out.push(autodiff_derive);
+    }
 
     quote! {
         #(#out)*

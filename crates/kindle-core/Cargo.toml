@@ -46,7 +46,7 @@ openblas-system = ["burn/openblas-system"]
 wasm-sync = ["burn/wasm-sync"]
 
 # Backend decorators
-autodiff = ["burn/autodiff"]
+autodiff = ["burn/autodiff", "kindle-macros/autodiff"]
 fusion = ["burn/fusion"]
 
 # Network
