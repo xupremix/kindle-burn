@@ -16,3 +16,8 @@ use stable as macros;
 pub fn define_tensor(input: TokenStream) -> TokenStream {
     macros::tensor::define_tensor(input)
 }
+
+#[proc_macro]
+pub fn tensor(input: TokenStream) -> TokenStream {
+    macros::tensor::tensor(input)
+}

@@ -34,7 +34,6 @@ pub(crate) fn define_tensor(input: TokenStream) -> TokenStream {
     };
     let where_clause = quote! {
         Backend: kindle_burn::tensor::backend::Backend,
-        // Device: kindle_burn::device::KindleDevice<Backend>,
         Kind: kindle_burn::tensor::TensorKind<Backend>,
     };
     let derive_methods = derive::derive(dim_val, &name, &dims);
@@ -57,4 +56,8 @@ pub(crate) fn define_tensor(input: TokenStream) -> TokenStream {
         #derive_methods
     }
     .into()
+}
+
+pub(crate) fn tensor(input: TokenStream) -> TokenStream {
+    quote! {}.into()
 }
