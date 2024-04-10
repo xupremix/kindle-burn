@@ -1,20 +1,15 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct KindleFusionDevice<Device, Backend>
-where
-    Backend: burn_fusion::FusionBackend,
-    Device: crate::device::KindleDevice<Backend>,
-{
+pub struct KindleFusionDevice<Device> {
     _device: std::marker::PhantomData<Device>,
-    _backend: std::marker::PhantomData<Backend>,
 }
 
 #[cfg(all(feature = "wgpu"))]
 impl<Device, GraphicsApi, FloatElement, IntElement>
     crate::device::KindleDevice<
         crate::backend::Fusion<crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>,
-    > for KindleFusionDevice<Device, crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>
+    > for KindleFusionDevice<Device>
 where
     Device:
         crate::device::KindleDevice<crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>,
@@ -33,7 +28,7 @@ impl<Device, GraphicsApi, FloatElement, IntElement>
         crate::backend::Autodiff<
             crate::backend::Fusion<crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>,
         >,
-    > for KindleFusionDevice<Device, crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>
+    > for KindleFusionDevice<Device>
 where
     Device:
         crate::device::KindleDevice<crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>,

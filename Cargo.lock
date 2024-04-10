@@ -1844,6 +1844,7 @@ dependencies = [
  "burn-fusion",
  "kindle-macros",
  "serde",
+ "static_assertions",
 ]
 
 [[package]]

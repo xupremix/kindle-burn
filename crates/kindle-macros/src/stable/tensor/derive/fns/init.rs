@@ -29,49 +29,74 @@ pub(crate) fn derive_init(
             transposed_dims
         }
     };
-    // let swap_static_dims = {
-    //     let mut out = vec![];
-    //     for i in 0..dim_val {
-    //         for j in i..dim_val {
-    //             if i == j {
-    //                 continue;
-    //             }
-    //             out.push(quote! {
-    //                 impl kindle_burn::dimensions::Swappable<#i, #j> for Swap<#i, #j> {}
-    //             });
-    //         }
-    //     }
-    //     out
-    // };
-    // let swap_dims_static_methods = {
-    //     let mut out = vec![];
-    //     for i in 0..dim_val {
-    //         for j in i..dim_val {
-    //             let doc = format!("Swaps dimensions {i} and {j} of the tensor.");
-    //             let mut new_dims = ty_dims.iter().collect::<Vec<_>>();
-    //             new_dims.swap(i, j);
-    //             out.push(quote! {
-    //                 #[doc = #doc]
-    //                 pub fn swap_dims<S>(self) -> #name <
-    //                     Backend,
-    //                     Device,
-    //                     #(#new_dims),*,
-    //                     Kind,
-    //                 > where S: kindle_burn::dimensions::Swappable<#i, #j> {
-    //                     #name {
-    //                         tensor: self.tensor.swap_dims(#i, #j),
-    //                         _device: std::marker::PhantomData,
-    //                     }
-    //                 }
-    //             });
-    //         }
-    //     }
-    //     out
-    // };
+    let swap_dims_static_methods = {
+        let mut out = vec![];
+        for i in 0..dim_val {
+            for j in i + 1..dim_val {
+                let doc = format!("Swaps dimensions {i} and {j} of the tensor.");
+                let mut new_dims = ty_dims.iter().collect::<Vec<_>>();
+                new_dims.swap(i, j);
+                out.push(quote! {
+                    impl <
+                        Backend,
+                        Device,
+                        #(#dims),*,
+                        Kind,
+                    >   kindle_burn::dimensions::Swap<#i, #j> for #name <
+                        Backend,
+                        Device,
+                        #(#ty_dims),*,
+                        Kind,
+                    >
+                    where
+                        Backend: kindle_burn::tensor::backend::Backend,
+                        Device: kindle_burn::device::KindleDevice<Backend>,
+                        Kind: kindle_burn::tensor::BasicOps<Backend>,
+                    {
+                        type Output = #name <
+                            Backend,
+                            Device,
+                            #(#new_dims),*,
+                            Kind,
+                        >;
+                        #[doc = #doc]
+                        fn swap_dims(self) -> Self::Output {
+                            #name {
+                                tensor: self.tensor.swap_dims(#i, #j),
+                                _device: std::marker::PhantomData,
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        out
+    };
+    let ranges = (0..dim_val)
+        .map(|i| syn::Ident::new(&format!("Range_{i}"), proc_macro2::Span::call_site()))
+        .collect::<Vec<_>>();
+    let where_ranges = ranges
+        .iter()
+        .zip(ty_dims.iter())
+        .map(|(range, dim)| {
+            quote! {
+                #range: kindle_burn::dimensions::ConstRange<0, #dim>
+            }
+        })
+        .collect::<Vec<_>>();
+    let check = ranges
+        .iter()
+        .zip(ty_dims.iter())
+        .enumerate()
+        .map(|(i, (range, dim))| {
+            let ident = syn::Ident::new(&format!("range_{i}"), proc_macro2::Span::call_site());
+            quote! {
+                 // let #ident = <#range as kindle_burn::dimensions::ConstRange<0, #dim>>::VALID;
+                 let #ident = #range::new();
+            }
+        })
+        .collect::<Vec<_>>();
     quote! {
-        // struct Swap<const D1: usize, const D2: usize>;
-        // #(#swap_static_dims)*
-
         impl <
             Backend,
             Device,
@@ -120,8 +145,24 @@ pub(crate) fn derive_init(
                     _device: std::marker::PhantomData,
                 }
             }
-            //
-            // #(#swap_dims_static_methods)*
+
+            /// Returns the tensor containing the elements selected from the ranges
+            pub fn slice<
+                #(#ranges),*
+            >(self) -> #name <
+                Backend,
+                Device,
+                #(#ty_dims),*,
+                Kind,
+            >
+            where
+                #(#where_ranges),*
+            {
+                #(#check)*
+                todo!()
+            }
         }
+        #(#swap_dims_static_methods)*
+
     }
 }

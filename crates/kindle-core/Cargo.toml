@@ -60,3 +60,4 @@ kindle-macros = { path = "../kindle-macros" }
 burn = { workspace = true }
 serde = { workspace = true}
 burn-fusion = { workspace = true }
+static_assertions = { workspace = true }

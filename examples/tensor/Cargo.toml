@@ -9,3 +9,5 @@ license.workspace = true
 path = "../../"
 version = "0.1.0"
 features = ["std","autodiff", "wgpu", "candle", "ndarray", "fusion"]
+
+[dependencies]
