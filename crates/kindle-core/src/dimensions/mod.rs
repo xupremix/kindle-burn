@@ -5,24 +5,20 @@ pub trait Swap<const D1: usize, const D2: usize> {
 }
 
 pub trait ConstRange<const MIN: usize, const MAX: usize, const START: usize, const DIM: usize> {
-    const START: usize = START;
-    const DIM: usize = DIM;
-    const VALID: ();
-    fn new() -> std::ops::Range<usize>;
+    const VALID: () = assert!(MIN < MAX && START >= MIN && START + DIM <= MAX);
+    fn new() -> std::ops::Range<usize> {
+        _ = <Self as ConstRange<MIN, MAX, START, DIM>>::VALID;
+        START..START + DIM
+    }
 }
 
-pub struct Range<const START: usize, const DIM: usize> {
+pub struct Range {
     _private: (),
 }
 
 impl<const MIN: usize, const MAX: usize, const START: usize, const DIM: usize>
-    ConstRange<MIN, MAX, START, DIM> for Range<START, DIM>
+    ConstRange<MIN, MAX, START, DIM> for Range
 {
-    const VALID: () = assert!(MIN < MAX && START >= MIN && START + DIM <= MAX);
-    fn new() -> std::ops::Range<usize> {
-        _ = <Self as ConstRange<MIN, MAX, START, DIM>>::VALID;
-        START..DIM
-    }
 }
 
 // Flatten

@@ -84,37 +84,68 @@ pub(crate) fn derive_init(
             }
         })
         .collect::<Vec<_>>();
-    let const_ranges_dims = (0..dim_val)
+    let ranges_idents = (0..dim_val)
         .map(|i| syn::Ident::new(&format!("RANGE_2_{i}"), proc_macro2::Span::call_site()))
         .collect::<Vec<_>>();
     let ranges = (0..dim_val)
-        .map(|i| syn::Ident::new(&format!("Range_{i}"), proc_macro2::Span::call_site()))
-        .collect::<Vec<_>>();
-    let where_ranges = ranges
-        .iter()
-        .zip(ty_dims.iter())
-        .enumerate()
-        .map(|(i, (range, dim))| {
-            let ident_range_1 =
-                syn::Ident::new(&format!("RANGE_1_{i}"), proc_macro2::Span::call_site());
-            let ident_range_2 =
-                syn::Ident::new(&format!("RANGE_2_{i}"), proc_macro2::Span::call_site());
-            quote! {
-                #range: kindle_burn::dimensions::ConstRange<0, #dim, #ident_range_1, #ident_range_2>,
-            }
-        })
+        .map(|i| syn::Ident::new(&format!("range_{i}"), proc_macro2::Span::call_site()))
         .collect::<Vec<_>>();
     let check = ranges
         .iter()
         .zip(ty_dims.iter())
         .enumerate()
         .map(|(i, (range, dim))| {
-            let ident = syn::Ident::new(&format!("range_{i}"), proc_macro2::Span::call_site());
+            let first = syn::Ident::new(&format!("RANGE_1_{i}"), proc_macro2::Span::call_site());
+            let second = syn::Ident::new(&format!("RANGE_2_{i}"), proc_macro2::Span::call_site());
             quote! {
-                 let #ident = #range::new();
+                let #range = <
+                    kindle_burn::dimensions::Range as
+                        kindle_burn::dimensions::ConstRange<
+                            0,
+                            #dim,
+                            #first,
+                            #second,
+                        >
+                    >::new();
             }
         })
         .collect::<Vec<_>>();
+
+    let slice_method = quote! {
+        impl <
+            Backend,
+            Device,
+            #(#dims),*,
+            Kind,
+        > #name <
+            Backend,
+            Device,
+            #(#ty_dims),*,
+            Kind,
+        > where
+            Backend: kindle_burn::tensor::backend::Backend,
+            Device: kindle_burn::device::KindleDevice<Backend>,
+            Kind: kindle_burn::tensor::BasicOps<Backend>,
+        {
+            /// returns the tensor containing the elements selected from the ranges
+            pub fn slice<
+                #(#const_ranges)*
+            >(self) -> #name <
+                Backend,
+                Device,
+                #(#ranges_idents),*,
+                Kind,
+            >{
+                #(#check)*
+                #name {
+                    tensor: self.tensor.slice(
+                        [#(#ranges),*]
+                    ),
+                    _device: std::marker::PhantomData,
+                }
+            }
+        }
+    };
     quote! {
         impl <
             Backend,
@@ -166,37 +197,6 @@ pub(crate) fn derive_init(
             }
         }
         #(#swap_dims_static_methods)*
-        impl <
-            Backend,
-            Device,
-            #(#dims),*,
-            Kind,
-        > #name <
-            Backend,
-            Device,
-            #(#ty_dims),*,
-            Kind,
-        > where
-            Backend: kindle_burn::tensor::backend::Backend,
-            Device: kindle_burn::device::KindleDevice<Backend>,
-            Kind: kindle_burn::tensor::TensorKind<Backend>,
-        {
-            /// Returns the tensor containing the elements selected from the ranges
-            pub fn slice<
-                #(#const_ranges)*
-                #(#ranges),*
-            >(self) -> #name <
-                Backend,
-                Device,
-                #(#const_ranges_dims),*,
-                Kind,
-            >
-            where
-                #(#where_ranges)*
-            {
-                #(#check)*
-                todo!()
-            }
-        }
+        #slice_method
     }
 }
