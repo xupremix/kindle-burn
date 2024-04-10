@@ -72,15 +72,35 @@ pub(crate) fn derive_init(
         }
         out
     };
+    let const_ranges = (0..dim_val)
+        .map(|i| {
+            let ident_range_1 =
+                syn::Ident::new(&format!("RANGE_1_{i}"), proc_macro2::Span::call_site());
+            let ident_range_2 =
+                syn::Ident::new(&format!("RANGE_2_{i}"), proc_macro2::Span::call_site());
+            quote! {
+                const #ident_range_1: usize,
+                const #ident_range_2: usize,
+            }
+        })
+        .collect::<Vec<_>>();
+    let const_ranges_dims = (0..dim_val)
+        .map(|i| syn::Ident::new(&format!("RANGE_2_{i}"), proc_macro2::Span::call_site()))
+        .collect::<Vec<_>>();
     let ranges = (0..dim_val)
         .map(|i| syn::Ident::new(&format!("Range_{i}"), proc_macro2::Span::call_site()))
         .collect::<Vec<_>>();
     let where_ranges = ranges
         .iter()
         .zip(ty_dims.iter())
-        .map(|(range, dim)| {
+        .enumerate()
+        .map(|(i, (range, dim))| {
+            let ident_range_1 =
+                syn::Ident::new(&format!("RANGE_1_{i}"), proc_macro2::Span::call_site());
+            let ident_range_2 =
+                syn::Ident::new(&format!("RANGE_2_{i}"), proc_macro2::Span::call_site());
             quote! {
-                #range: kindle_burn::dimensions::ConstRange<0, #dim>
+                #range: kindle_burn::dimensions::ConstRange<0, #dim, #ident_range_1, #ident_range_2>,
             }
         })
         .collect::<Vec<_>>();
@@ -91,7 +111,6 @@ pub(crate) fn derive_init(
         .map(|(i, (range, dim))| {
             let ident = syn::Ident::new(&format!("range_{i}"), proc_macro2::Span::call_site());
             quote! {
-                 // let #ident = <#range as kindle_burn::dimensions::ConstRange<0, #dim>>::VALID;
                  let #ident = #range::new();
             }
         })
@@ -145,24 +164,39 @@ pub(crate) fn derive_init(
                     _device: std::marker::PhantomData,
                 }
             }
-
+        }
+        #(#swap_dims_static_methods)*
+        impl <
+            Backend,
+            Device,
+            #(#dims),*,
+            Kind,
+        > #name <
+            Backend,
+            Device,
+            #(#ty_dims),*,
+            Kind,
+        > where
+            Backend: kindle_burn::tensor::backend::Backend,
+            Device: kindle_burn::device::KindleDevice<Backend>,
+            Kind: kindle_burn::tensor::TensorKind<Backend>,
+        {
             /// Returns the tensor containing the elements selected from the ranges
             pub fn slice<
+                #(#const_ranges)*
                 #(#ranges),*
             >(self) -> #name <
                 Backend,
                 Device,
-                #(#ty_dims),*,
+                #(#const_ranges_dims),*,
                 Kind,
             >
             where
-                #(#where_ranges),*
+                #(#where_ranges)*
             {
                 #(#check)*
                 todo!()
             }
         }
-        #(#swap_dims_static_methods)*
-
     }
 }

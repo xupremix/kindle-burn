@@ -21,7 +21,7 @@ fn main() {
     >::empty();
 
     let sliced =
-        empty.slice::<Range<0, 100, 0, 100>, Range<0, 200, 0, 200>, Range<0, 300, 0, 300>>();
+        empty.slice::<0, 101, 0, 100, 0, 150, Range<0, 101>, Range<0, 100>, Range<0, 150>>();
     // println!("{:#?}", empty);
     // let new = empty.transpose();
 

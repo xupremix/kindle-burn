@@ -4,35 +4,26 @@ pub trait Swap<const D1: usize, const D2: usize> {
     fn swap_dims(self) -> Self::Output;
 }
 
-pub trait ConstRange<const START: usize, const END: usize> {
+pub trait ConstRange<const MIN: usize, const MAX: usize, const START: usize, const DIM: usize> {
+    const START: usize = START;
+    const DIM: usize = DIM;
     const VALID: ();
     fn new() -> std::ops::Range<usize>;
 }
 
-pub struct Range<const Min: usize, const MAX: usize, const START: usize, const END: usize> {
+pub struct Range<const START: usize, const DIM: usize> {
     _private: (),
 }
 
-impl<const MIN: usize, const MAX: usize, const START: usize, const END: usize> ConstRange<MIN, MAX>
-    for Range<MIN, MAX, START, END>
+impl<const MIN: usize, const MAX: usize, const START: usize, const DIM: usize>
+    ConstRange<MIN, MAX, START, DIM> for Range<START, DIM>
 {
-    const VALID: () = assert!(MIN < MAX && START >= MIN && END <= MAX && START < END);
+    const VALID: () = assert!(MIN < MAX && START >= MIN && START + DIM <= MAX);
     fn new() -> std::ops::Range<usize> {
-        _ = <Self as ConstRange<MIN, MAX>>::VALID;
-        START..END
+        _ = <Self as ConstRange<MIN, MAX, START, DIM>>::VALID;
+        START..DIM
     }
 }
-
-// impl<const MIN: usize, const MAX: usize, const START: usize, const END: usize>
-//     Range<MIN, MAX, START, END>
-// where
-//     Self: ConstRange<MIN, MAX>,
-// {
-//     pub fn new() -> std::ops::Range<usize> {
-//         _ = <Self as ConstRange<MIN, MAX>>::VALID;
-//         START..END
-//     }
-// }
 
 // Flatten
 // Reshape
