@@ -10,7 +10,7 @@ where
     _backend: std::marker::PhantomData<Backend>,
 }
 
-#[cfg(all(feature = "wgpu", not(feature = "autodiff")))]
+#[cfg(all(feature = "wgpu"))]
 impl<Device, GraphicsApi, FloatElement, IntElement>
     crate::device::KindleDevice<
         crate::backend::Fusion<crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>>,

@@ -4,7 +4,7 @@ macro_rules! tch_device {
     ($device:ident, $device_variant:ident $(,$n:ident)?) => {
         #[derive(Debug, Clone, Serialize, Deserialize)]
         pub struct $device <
-            $(const $n: usize,)?
+            $(const $n: usize = 0,)?
             Element = f32,
         >
         where
@@ -12,12 +12,6 @@ macro_rules! tch_device {
         {
             _element: std::marker::PhantomData<Element>,
         }
-    };
-}
-
-#[cfg(not(feature = "autodiff"))]
-macro_rules! impl_device {
-    ($device:ident, $device_variant:ident $(,$n:ident)?) => {
         impl<
             $(const $n: usize,)?
             Element
@@ -38,12 +32,3 @@ tch_device!(LibTorchCudaDevice, Cuda, N);
 tch_device!(LibTorchCpuDevice, Cpu);
 tch_device!(LibTorchMpsDevice, Mps);
 tch_device!(LibTorchVulkanDevice, Vulkan);
-
-#[cfg(not(feature = "autodiff"))]
-impl_device!(LibTorchCudaDevice, Cuda, N);
-#[cfg(not(feature = "autodiff"))]
-impl_device!(LibTorchCpuDevice, Cpu);
-#[cfg(not(feature = "autodiff"))]
-impl_device!(LibTorchMpsDevice, Mps);
-#[cfg(not(feature = "autodiff"))]
-impl_device!(LibTorchVulkanDevice, Vulkan);

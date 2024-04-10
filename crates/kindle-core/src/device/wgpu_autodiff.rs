@@ -4,7 +4,7 @@ macro_rules! impl_device {
             $(const $n: usize,)?
             GraphicsApi,
             FloatElement,
-            IntElement
+            IntElement,
         >   crate::device::KindleDevice<
             crate::backend::Autodiff<
                 crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>,

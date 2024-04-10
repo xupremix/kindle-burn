@@ -30,8 +30,6 @@ mod wgpu_autodiff;
 mod fusion;
 #[cfg(feature = "fusion")]
 pub use fusion::*;
-#[cfg(all(feature = "fusion", feature = "autodiff"))]
-mod fusion_autodiff;
 
 pub trait KindleDevice<Backend>:
     core::fmt::Debug + Clone + 'static + Sized + Serialize + Deserialize<'static> + Send + Sync

@@ -29,48 +29,48 @@ pub(crate) fn derive_init(
             transposed_dims
         }
     };
-    let swap_static_dims = {
-        let mut out = vec![];
-        for i in 0..dim_val {
-            for j in i..dim_val {
-                if i == j {
-                    continue;
-                }
-                out.push(quote! {
-                    impl kindle_burn::dimensions::Swappable<#i, #j> for Swap<#i, #j> {}
-                });
-            }
-        }
-        out
-    };
-    let swap_dims_static_methods = {
-        let mut out = vec![];
-        for i in 0..dim_val {
-            for j in i..dim_val {
-                let doc = format!("Swaps dimensions {i} and {j} of the tensor.");
-                let mut new_dims = ty_dims.iter().collect::<Vec<_>>();
-                new_dims.swap(i, j);
-                out.push(quote! {
-                    #[doc = #doc]
-                    pub fn swap_dims<S>(self) -> #name <
-                        Backend,
-                        Device,
-                        #(#new_dims),*,
-                        Kind,
-                    > where S: kindle_burn::dimensions::Swappable<#i, #j> {
-                        #name {
-                            tensor: self.tensor.swap_dims(#i, #j),
-                            _device: std::marker::PhantomData,
-                        }
-                    }
-                });
-            }
-        }
-        out
-    };
+    // let swap_static_dims = {
+    //     let mut out = vec![];
+    //     for i in 0..dim_val {
+    //         for j in i..dim_val {
+    //             if i == j {
+    //                 continue;
+    //             }
+    //             out.push(quote! {
+    //                 impl kindle_burn::dimensions::Swappable<#i, #j> for Swap<#i, #j> {}
+    //             });
+    //         }
+    //     }
+    //     out
+    // };
+    // let swap_dims_static_methods = {
+    //     let mut out = vec![];
+    //     for i in 0..dim_val {
+    //         for j in i..dim_val {
+    //             let doc = format!("Swaps dimensions {i} and {j} of the tensor.");
+    //             let mut new_dims = ty_dims.iter().collect::<Vec<_>>();
+    //             new_dims.swap(i, j);
+    //             out.push(quote! {
+    //                 #[doc = #doc]
+    //                 pub fn swap_dims<S>(self) -> #name <
+    //                     Backend,
+    //                     Device,
+    //                     #(#new_dims),*,
+    //                     Kind,
+    //                 > where S: kindle_burn::dimensions::Swappable<#i, #j> {
+    //                     #name {
+    //                         tensor: self.tensor.swap_dims(#i, #j),
+    //                         _device: std::marker::PhantomData,
+    //                     }
+    //                 }
+    //             });
+    //         }
+    //     }
+    //     out
+    // };
     quote! {
-        struct Swap<const D1: usize, const D2: usize>;
-        #(#swap_static_dims)*
+        // struct Swap<const D1: usize, const D2: usize>;
+        // #(#swap_static_dims)*
 
         impl <
             Backend,
@@ -120,8 +120,8 @@ pub(crate) fn derive_init(
                     _device: std::marker::PhantomData,
                 }
             }
-
-            #(#swap_dims_static_methods)*
+            //
+            // #(#swap_dims_static_methods)*
         }
     }
 }
