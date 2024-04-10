@@ -75,9 +75,9 @@ pub(crate) fn derive_init(
     let const_ranges = (0..dim_val)
         .map(|i| {
             let ident_range_1 =
-                syn::Ident::new(&format!("RANGE_1_{i}"), proc_macro2::Span::call_site());
+                syn::Ident::new(&format!("RANGE_{i}_0"), proc_macro2::Span::call_site());
             let ident_range_2 =
-                syn::Ident::new(&format!("RANGE_2_{i}"), proc_macro2::Span::call_site());
+                syn::Ident::new(&format!("RANGE_{i}_1"), proc_macro2::Span::call_site());
             quote! {
                 const #ident_range_1: usize,
                 const #ident_range_2: usize,
@@ -85,7 +85,7 @@ pub(crate) fn derive_init(
         })
         .collect::<Vec<_>>();
     let ranges_idents = (0..dim_val)
-        .map(|i| syn::Ident::new(&format!("RANGE_2_{i}"), proc_macro2::Span::call_site()))
+        .map(|i| syn::Ident::new(&format!("RANGE_{i}_1"), proc_macro2::Span::call_site()))
         .collect::<Vec<_>>();
     let ranges = (0..dim_val)
         .map(|i| syn::Ident::new(&format!("range_{i}"), proc_macro2::Span::call_site()))
@@ -95,8 +95,8 @@ pub(crate) fn derive_init(
         .zip(ty_dims.iter())
         .enumerate()
         .map(|(i, (range, dim))| {
-            let first = syn::Ident::new(&format!("RANGE_1_{i}"), proc_macro2::Span::call_site());
-            let second = syn::Ident::new(&format!("RANGE_2_{i}"), proc_macro2::Span::call_site());
+            let first = syn::Ident::new(&format!("RANGE_{i}_0"), proc_macro2::Span::call_site());
+            let second = syn::Ident::new(&format!("RANGE_{i}_1"), proc_macro2::Span::call_site());
             quote! {
                 let #range = <
                     kindle_burn::dimensions::Range as
@@ -111,6 +111,53 @@ pub(crate) fn derive_init(
         })
         .collect::<Vec<_>>();
 
+    let assign_new_tensor_dims = (0..dim_val)
+        .map(|i| {
+            let ident = syn::Ident::new(&format!("V_DIM_{i}"), proc_macro2::Span::call_site());
+            quote! {
+                const #ident: usize,
+            }
+        })
+        .collect::<Vec<_>>();
+    let assign_const_ranges = (0..dim_val)
+        .map(|i| {
+            let ident_range_1 =
+                syn::Ident::new(&format!("RANGE_{i}_0"), proc_macro2::Span::call_site());
+            let ident_range_2 =
+                syn::Ident::new(&format!("RANGE_{i}_1"), proc_macro2::Span::call_site());
+            let ident = syn::Ident::new(&format!("V_DIM_{i}"), proc_macro2::Span::call_site());
+            quote! {
+                const #ident_range_1: usize,
+                const #ident_range_2: usize,
+            }
+        })
+        .collect::<Vec<_>>();
+    let assign_ranges_idents = (0..dim_val)
+        .map(|i| syn::Ident::new(&format!("V_DIM_{i}"), proc_macro2::Span::call_site()))
+        .collect::<Vec<_>>();
+    let assign_ranges = (0..dim_val)
+        .map(|i| syn::Ident::new(&format!("range_{i}"), proc_macro2::Span::call_site()))
+        .collect::<Vec<_>>();
+    let assign_check = assign_ranges
+        .iter()
+        .zip(assign_ranges_idents.iter())
+        .enumerate()
+        .map(|(i, (range, dim))| {
+            let first = syn::Ident::new(&format!("RANGE_{i}_0"), proc_macro2::Span::call_site());
+            let second = syn::Ident::new(&format!("RANGE_{i}_1"), proc_macro2::Span::call_site());
+            quote! {
+                let #range = <
+                    kindle_burn::dimensions::Range as
+                        kindle_burn::dimensions::ConstRange<
+                            0,
+                            #dim,
+                            #first,
+                            #second,
+                        >
+                    >::new();
+            }
+        })
+        .collect::<Vec<_>>();
     let slice_method = quote! {
         impl <
             Backend,
@@ -127,7 +174,7 @@ pub(crate) fn derive_init(
             Device: kindle_burn::device::KindleDevice<Backend>,
             Kind: kindle_burn::tensor::BasicOps<Backend>,
         {
-            /// returns the tensor containing the elements selected from the ranges
+            /// Returns the tensor containing the elements selected from the ranges
             pub fn slice<
                 #(#const_ranges)*
             >(self) -> #name <
@@ -140,6 +187,35 @@ pub(crate) fn derive_init(
                 #name {
                     tensor: self.tensor.slice(
                         [#(#ranges),*]
+                    ),
+                    _device: std::marker::PhantomData,
+                }
+            }
+
+            /// Returns a copy of the current tensor with the selected
+            /// elements changed to the new ones at the selectet indices
+            pub fn slice_assign<
+                #(#assign_new_tensor_dims)*
+                #(#assign_const_ranges)*
+            > (
+                self,
+                values: #name <
+                    Backend,
+                    Device,
+                    #(#assign_ranges_idents),*,
+                    Kind,
+                >
+            ) -> Self
+            where
+                Backend: kindle_burn::tensor::backend::Backend,
+                Device: kindle_burn::device::KindleDevice<Backend>,
+                Kind: kindle_burn::tensor::BasicOps<Backend>,
+            {
+                #(#assign_check)*
+                Self {
+                    tensor: self.tensor.slice_assign(
+                        [#(#assign_ranges),*],
+                        values.tensor,
                     ),
                     _device: std::marker::PhantomData,
                 }
