@@ -5,7 +5,7 @@ pub trait Swap<const D1: usize, const D2: usize> {
 }
 
 pub trait ConstRange<const MIN: usize, const MAX: usize, const START: usize, const DIM: usize> {
-    const VALID: () = assert!(MIN < MAX && START >= MIN && START + DIM <= MAX);
+    const VALID: () = assert!(MIN < MAX && START >= MIN && START + DIM <= MAX && DIM != 0);
     fn new() -> std::ops::Range<usize> {
         _ = <Self as ConstRange<MIN, MAX, START, DIM>>::VALID;
         START..START + DIM

@@ -111,6 +111,12 @@ pub(crate) fn derive_init(
         })
         .collect::<Vec<_>>();
 
+    // TODO:
+    // Slice assign seems to only allow for the following case:
+    // let dim = N;
+    // then the Ranbe must be 0..N
+    // consider switching to only N dimensions -> [0..V_DIM_0 ... 0..V_DIM_N]
+    // and removing the unnecessary const range check?
     let assign_new_tensor_dims = (0..dim_val)
         .map(|i| {
             let ident = syn::Ident::new(&format!("V_DIM_{i}"), proc_macro2::Span::call_site());
