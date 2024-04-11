@@ -4,7 +4,11 @@ use quote::quote;
 #[cfg(feature = "autodiff")]
 mod autodiff;
 
+mod base;
 mod init;
+mod slice;
+mod switch_dims;
+mod transpose;
 
 pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) -> TokenStream {
     let ty_dims = (0..dim_val)
@@ -20,7 +24,13 @@ pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) ->
     {
         out.push(autodiff::derive_autodiff(dim_val, name, dims, &ty_dims));
     }
+    out.push(base::derive_base(dim_val, name, dims, &ty_dims));
+    out.push(transpose::derive_transpose(dim_val, name, dims, &ty_dims));
     out.push(init::derive_init(dim_val, name, dims, &ty_dims));
+    out.push(slice::derive_slice(dim_val, name, dims, &ty_dims));
+    out.push(switch_dims::derive_switch_dims(
+        dim_val, name, dims, &ty_dims,
+    ));
 
     quote! {
         #(#out)*
