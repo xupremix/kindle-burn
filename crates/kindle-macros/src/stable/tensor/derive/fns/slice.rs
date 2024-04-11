@@ -34,8 +34,8 @@ pub(crate) fn derive_slice(
             let second = syn::Ident::new(&format!("RANGE_{i}_1"), proc_macro2::Span::call_site());
             quote! {
                 let #range = <
-                    kindle_burn::dimensions::Range as
-                        kindle_burn::dimensions::ConstRange<
+                    kindle_burn::const_assert::Range as
+                        kindle_burn::const_assert::ConstRange<
                             0,
                             #dim,
                             #first,
@@ -65,8 +65,8 @@ pub(crate) fn derive_slice(
         .map(|(range, dim)| {
             quote! {
                 let #range = <
-                    kindle_burn::dimensions::Range as
-                        kindle_burn::dimensions::ConstRange<
+                    kindle_burn::const_assert::Range as
+                        kindle_burn::const_assert::ConstRange<
                             0,
                             #dim,
                             0,

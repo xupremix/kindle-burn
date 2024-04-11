@@ -6,8 +6,9 @@ mod autodiff;
 
 mod base;
 mod init;
+mod repeat;
 mod slice;
-mod switch_dims;
+mod swap_dims;
 mod transpose;
 
 pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) -> TokenStream {
@@ -28,9 +29,8 @@ pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) ->
     out.push(transpose::derive_transpose(dim_val, name, dims, &ty_dims));
     out.push(init::derive_init(dim_val, name, dims, &ty_dims));
     out.push(slice::derive_slice(dim_val, name, dims, &ty_dims));
-    out.push(switch_dims::derive_switch_dims(
-        dim_val, name, dims, &ty_dims,
-    ));
+    out.push(swap_dims::derive_switch_dims(dim_val, name, dims, &ty_dims));
+    out.push(repeat::derive_repeat(dim_val, name, dims, &ty_dims));
 
     quote! {
         #(#out)*

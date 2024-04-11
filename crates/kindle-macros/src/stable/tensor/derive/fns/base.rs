@@ -90,12 +90,6 @@ pub(crate) fn derive_base(
                 }
             }
 
-            /// TODO: Look into how to implement this function while maintaining the type information.
-            /// Repeat
-            pub fn repeat() {
-                unimplemented!()
-            }
-
             /// Applies element-wise equal comparison and returns the respective boolean tensor.
             pub fn equal(self, other: Self) -> #name<
                 Backend,
