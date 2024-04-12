@@ -50,10 +50,37 @@ pub(crate) fn derive_bool(
                     _device: std::marker::PhantomData,
                 }
             }
-
-            pub fn int(self) {}
-            pub fn float(self) {}
-            pub fn bool_not(self) {}
+            /// Convert to a int tensor
+            pub fn int(self) -> #name<
+                Backend,
+                Device,
+                #(#ty_dims),*,
+                kindle_burn::tensor::Int,
+            >{
+                #name {
+                    tensor: self.tensor.int(),
+                    _device: std::marker::PhantomData,
+                }
+            }
+            /// Convert to a float tensor
+            pub fn float(self) -> #name<
+                Backend,
+                Device,
+                #(#ty_dims),*,
+                kindle_burn::tensor::Float,
+            >{
+                #name {
+                    tensor: self.tensor.float(),
+                    _device: std::marker::PhantomData,
+                }
+            }
+            /// Invert the boolean tensor
+            pub fn bool_not(self) -> Self {
+                Self {
+                    tensor: self.tensor.bool_not(),
+                    _device: std::marker::PhantomData,
+                }
+            }
         }
     }
 }
