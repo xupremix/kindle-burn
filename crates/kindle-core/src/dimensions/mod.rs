@@ -10,6 +10,12 @@ pub trait Repeat<const DIM: usize, const TIMES: usize> {
     fn repeat(self) -> Self::Output;
 }
 
+/// Trait which allows for narrowing a tensor along a dimension.
+pub trait Narrow<const DIM: usize, const START: usize, const LENGTH: usize> {
+    type Output;
+    fn narrow(self) -> Self::Output;
+}
+
 // Trait which allows for concatenating tensors along a dimension.
 // pub trait Cat<const DIM: usize, const N: usize, const SUM: usize> {
 //     const VALID: ();
