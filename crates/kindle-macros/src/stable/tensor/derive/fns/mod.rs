@@ -12,6 +12,7 @@ mod repeat;
 mod slice;
 mod swap_dims;
 mod t_bool;
+mod t_float;
 mod transpose;
 
 pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) -> TokenStream {
@@ -37,6 +38,7 @@ pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) ->
     out.push(cat::derive_cat(dim_val, name, dims, &ty_dims));
     out.push(narrow::derive_narrow(dim_val, name, dims, &ty_dims));
     out.push(t_bool::derive_bool(dim_val, name, dims, &ty_dims));
+    out.push(t_float::derive_float(dim_val, name, dims, &ty_dims));
 
     quote! {
         #(#out)*

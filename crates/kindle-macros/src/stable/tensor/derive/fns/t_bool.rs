@@ -31,8 +31,8 @@ pub(crate) fn derive_bool(
                 Data: Into<kindle_burn::tensor::Data<
                     bool,
                     #dim_val
-                >>
-            {
+                >
+            > {
                 let curr_dims = [#(#ty_dims),*];
                 let data = data.into();
                 for (dim, curr_dim) in data.shape.dims.iter().zip(curr_dims.iter()) {
