@@ -7,7 +7,6 @@ pub(crate) fn derive_cat(
     dims: &[TokenStream],
     ty_dims: &[TokenStream],
 ) -> TokenStream {
-    let new_dim = dim_val + 1;
     quote! {
         impl <
             Backend,
@@ -29,24 +28,40 @@ pub(crate) fn derive_cat(
             /// WARNING: This function panics if the provided dimension results are not == to the
             /// resulting sum of the dimensions of the tensors.
             fn cat_unchecked<const DIM: usize>(
-                tensors: &[Self],
+                tensors: &[kindle_burn::tensor::Tensor<
+                    Backend,
+                    #dim_val,
+                    Kind,
+                >],
             ) -> Self {
                 _ = <kindle_burn::const_assert::Value as
                     kindle_burn::const_assert::ConstValueBetween<
-                        DIM, 0, #new_dim
+                        DIM, 0, #dim_val
                     >
                 >::validate();
-                let tensors = tensors.iter().map(|t| t.tensor.clone()).collect::<Vec<_>>();
-                let tensor = kindle_burn::tensor::Tensor::cat(tensors, DIM);
 
-                let provided_dims = [#(#ty_dims),*];
-                let dims = tensor.dims();
-                if dims.iter().enumerate().any(|(i, d)| *d != provided_dims[i]) {
-                    panic!("The provided dimensions are not equal to the resulting dimensions, \
-                        Found: {:?}, Expected: {:?}", dims, provided_dims);
+                // check for the sum of dims
+                let ty_dim = [#(#ty_dims),*];
+                let dim = ty_dim[DIM];
+                let sum = tensors.iter().map(|t| t.dims()[DIM]).sum::<usize>();
+                assert_eq!(sum, dim, "Wrong dimension sum provided, expected: {sum}, got: {dim}");
+
+                // check for the other dimensions
+                for i in 0..#dim_val {
+                    if i == DIM {
+                        continue;
+                    }
+                    if tensors.iter().any(|t| t.dims()[i] != ty_dim[i]) {
+                        panic!("The other dimensions provided are not equal");
+                    }
                 }
+
                 Self {
-                    tensor,
+                    tensor: kindle_burn::tensor::Tensor::<
+                            Backend,
+                            #dim_val,
+                            Kind,
+                        >::cat(tensors.iter().cloned().collect::<Vec<_>>(), DIM),
                     _device: std::marker::PhantomData,
                 }
             }
