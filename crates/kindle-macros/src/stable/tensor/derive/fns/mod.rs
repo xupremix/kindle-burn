@@ -5,6 +5,7 @@ use quote::quote;
 mod autodiff;
 
 mod base;
+mod cat;
 mod init;
 mod repeat;
 mod slice;
@@ -31,6 +32,7 @@ pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) ->
     out.push(slice::derive_slice(dim_val, name, dims, &ty_dims));
     out.push(swap_dims::derive_switch_dims(dim_val, name, dims, &ty_dims));
     out.push(repeat::derive_repeat(dim_val, name, dims, &ty_dims));
+    out.push(cat::derive_cat(dim_val, name, dims, &ty_dims));
 
     quote! {
         #(#out)*

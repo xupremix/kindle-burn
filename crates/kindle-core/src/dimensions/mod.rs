@@ -10,6 +10,15 @@ pub trait Repeat<const DIM: usize, const TIMES: usize> {
     fn repeat(self) -> Self::Output;
 }
 
+// Trait which allows for concatenating tensors along a dimension.
+// pub trait Cat<const DIM: usize, const N: usize, const SUM: usize> {
+//     const VALID: ();
+//     type Output;
+//     fn cat(tensors: &[Self; N]) -> Self::Output
+//     where
+//         Self: Sized;
+// }
+
 // Flatten
 // Reshape
 // Squeeze

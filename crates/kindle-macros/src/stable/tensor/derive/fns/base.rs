@@ -102,12 +102,6 @@ pub(crate) fn derive_base(
                     _device: std::marker::PhantomData,
                 }
             }
-
-            /// TODO: Look into how to implement this function while maintaining the type information.
-            /// Repeat
-            pub fn cat() {
-                unimplemented!()
-            }
         }
     }
 }

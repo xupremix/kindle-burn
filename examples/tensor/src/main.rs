@@ -8,16 +8,22 @@ use kindle_burn::dimensions::Swap;
 define_tensor!(vis = pub, dim = 3);
 
 fn main() {
-    let t = kindle_burn::tensor::Tensor::<Wgpu, 3>::ones([10, 1, 30], &Default::default());
-    let _t0 = kindle_burn::tensor::Tensor::<Wgpu, 3>::zeros([10, 20, 30], &Default::default());
+    let t = kindle_burn::tensor::Tensor::<Wgpu, 3>::ones([10, 20, 30], &Default::default());
+    let t0 = kindle_burn::tensor::Tensor::<Wgpu, 3>::zeros([10, 20, 30], &Default::default());
+    let t1 = kindle_burn::tensor::Tensor::<Wgpu, 3>::zeros([10, 19, 30], &Default::default());
 
-    let empty: Tensor3<Wgpu, WgpuBestAvailableDevice, 10, 1, 30> = Tensor3::empty();
-    // let out = zeros.slice::<0, 10, 0, 20, 0, 30>();
+    let e: Tensor3<Wgpu, WgpuBestAvailableDevice, 10, 20, 30> = Tensor3::empty();
+    let e1: Tensor3<Wgpu, WgpuBestAvailableDevice, 10, 20, 30> = Tensor3::empty();
+    let e2: Tensor3<Wgpu, WgpuBestAvailableDevice, 10, 20, 30> = Tensor3::empty();
 
-    let out = t.repeat(1, 100);
-    let my_out = Repeat::<1, 100>::repeat(empty);
     // let other = Swap::<1, 2>::swap_dims(empty);
+
+    let out = kindle_burn::tensor::Tensor::cat(vec![t, t0, t1], 1);
     println!("{:?}", out.dims());
-    println!("{:?}", my_out.dims());
-    // let out = Tensor::cat(vec![t, t0], 0);
+
+    let my_out =
+        Tensor3::<Wgpu, WgpuBestAvailableDevice, 10, 20, 30>::cat_unchecked::<1>(&[e, e1, e2]);
+    // let my_out = kindle_burn::dimensions::Cat::<0, 3, 60>::cat(&[e, e1, e2]);
+
+    // println!("{:?}", my_out.dims());
 }

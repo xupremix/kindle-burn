@@ -6,11 +6,10 @@ pub trait ConstRange<const MIN: usize, const MAX: usize, const START: usize, con
     }
 }
 
-pub trait ConstValue<const VALUE: usize, const EQ: usize> {
-    const VALID: () = assert!(VALUE == EQ);
-    fn validate() -> usize {
+pub trait ConstValueBetween<const VALUE: usize, const MIN: usize, const MAX: usize> {
+    const VALID: () = assert!(MIN <= VALUE && VALUE < MAX);
+    fn validate() {
         _ = Self::VALID;
-        VALUE
     }
 }
 
@@ -26,4 +25,7 @@ impl<const MIN: usize, const MAX: usize, const START: usize, const DIM: usize>
 {
 }
 
-impl<const VALUE: usize, const EQ: usize> ConstValue<VALUE, EQ> for Value {}
+impl<const VALUE: usize, const MIN: usize, const MAX: usize> ConstValueBetween<VALUE, MIN, MAX>
+    for Value
+{
+}
