@@ -2,6 +2,7 @@ use kindle_burn::backend::Wgpu;
 use kindle_burn::define_tensor;
 use kindle_burn::device::WgpuBestAvailableDevice;
 use kindle_burn::dimensions::Narrow;
+use kindle_burn::tensor::Bool;
 
 define_tensor!(vis = pub, dim = 3);
 
@@ -15,10 +16,13 @@ fn main() {
     // let out = kindle_burn::tensor::Tensor::cat(vec![t, t0, t1], 1);
     // println!("{:?}", out.dims());
 
-    let my_out =
-        Tensor3::<Wgpu, WgpuBestAvailableDevice, 10, 20, 90>::cat_unchecked::<2>(&[t, t0, t1]);
-    let my_out = Narrow::<0, 5, 5>::narrow(my_out);
-    println!("{:?}", my_out.dims());
+    let out: Tensor3<Wgpu, WgpuBestAvailableDevice, 10, 20, 30, Bool> =
+        Tensor3::from_bool_unchecked([[[false; 30]; 20]; 10]);
+
+    // let my_out =
+    //     Tensor3::<Wgpu, WgpuBestAvailableDevice, 10, 20, 90>::cat_unchecked::<2>(&[t, t0, t1]);
+    // let my_out = Narrow::<0, 5, 5>::narrow(my_out);
+    // println!("{:?}", my_out.dims());
     // let my_out = kindle_burn::dimensions::Cat::<0, 3, 60>::cat(&[e, e1, e2]);
 
     // println!("{:?}", my_out.dims());
