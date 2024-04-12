@@ -8,6 +8,7 @@ mod base;
 mod cat;
 mod init;
 mod narrow;
+mod one_hot;
 mod repeat;
 mod slice;
 mod swap_dims;
@@ -39,6 +40,7 @@ pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) ->
     out.push(narrow::derive_narrow(dim_val, name, dims, &ty_dims));
     out.push(t_bool::derive_bool(dim_val, name, dims, &ty_dims));
     out.push(t_float::derive_float(dim_val, name, dims, &ty_dims));
+    out.push(one_hot::derive_one_hot(dim_val, name, dims, &ty_dims));
 
     quote! {
         #(#out)*

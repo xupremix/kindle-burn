@@ -182,7 +182,6 @@ pub(crate) fn derive_float(
                     _device: std::marker::PhantomData,
                 }
             }
-
         }
     }
 }
