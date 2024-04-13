@@ -115,6 +115,16 @@ pub(crate) fn derive_base(
                     _device: std::marker::PhantomData,
                 }
             }
+
+            /// Returns the scalar value of the tensor.
+            ///
+            /// WARNING: This function panics if the tensor doesn't contain a value.
+            pub fn into_scalar(self) -> <
+                Kind as kindle_burn::tensor::BasicOps<Backend>
+            >::Elem {
+                self.tensor.into_scalar()
+            }
+
         }
     }
 }
