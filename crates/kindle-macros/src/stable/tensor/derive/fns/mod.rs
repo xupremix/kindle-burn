@@ -4,6 +4,7 @@ use quote::quote;
 #[cfg(feature = "autodiff")]
 mod autodiff;
 
+mod all_dim;
 mod any_dim;
 mod base;
 mod cat;
@@ -48,6 +49,7 @@ pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) ->
         out.push(matmul::derive_matmul(dim_val, name, dims, &ty_dims));
     }
     out.push(any_dim::derive_any_dim(dim_val, name, dims, &ty_dims));
+    out.push(all_dim::derive_all_dim(dim_val, name, dims, &ty_dims));
 
     quote! {
         #(#out)*

@@ -22,6 +22,12 @@ pub trait AnyDim<const DIM: usize> {
     fn any_dim(self) -> Self::Output;
 }
 
+/// Trait which tests that every evaluation along a dimension is True
+pub trait AllDim<const DIM: usize> {
+    type Output;
+    fn all_dim(self) -> Self::Output;
+}
+
 // Flatten
 // Reshape
 // Squeeze
