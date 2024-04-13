@@ -114,7 +114,7 @@ pub(crate) fn derive_float(
 
             /// Creates a float tensor from the given data
             /// WARNING: panics if the dimensions provided do not match
-            pub fn from_float_unckecked<D>(
+            pub fn from_float_unchecked<D>(
                 data: D
             ) -> Self
             where
@@ -179,6 +179,19 @@ pub(crate) fn derive_float(
             ) -> Self {
                 Self {
                     tensor: self.tensor.random_like(distribution),
+                    _device: std::marker::PhantomData,
+                }
+            }
+
+            pub fn into_full_precision(self) -> #name<
+                <Backend::FullPrecisionBridge as
+                    kindle_burn::tensor::backend::BackendBridge<Backend>>::Target,
+                Device,
+                #(#ty_dims),*,
+                kindle_burn::tensor::Float,
+            > {
+                #name {
+                    tensor: self.tensor.into_full_precision(),
                     _device: std::marker::PhantomData,
                 }
             }
