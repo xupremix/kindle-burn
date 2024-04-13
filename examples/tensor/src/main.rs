@@ -1,15 +1,20 @@
 use kindle_burn::backend::Wgpu;
 use kindle_burn::define_tensor;
 use kindle_burn::device::WgpuBestAvailableDevice;
+use kindle_burn::tensor::Tensor;
 
 define_tensor!(vis = pub, dim = 3);
+define_tensor!(vis = pub, dim = 2);
 
 fn main() {
-    let t = kindle_burn::tensor::Tensor::<Wgpu, 3>::one_hot(3, 5, &Default::default());
-    println!("Dims: {:?}", t.dims());
-    println!("Data: {}", t.to_data());
+    let t = Tensor::<Wgpu, 3>::ones([10, 11, 12], &Default::default());
+    let t2 = Tensor::<Wgpu, 3>::ones([10, 12, 13], &Default::default());
 
-    let my_t: Tensor3<Wgpu, WgpuBestAvailableDevice, 1, 1, 5> = Tensor3::one_hot::<3>();
-    println!("Dims: {:?}", my_t.dims());
-    println!("Data: {}", my_t.to_data());
+    let out = t.matmul(t2);
+    println!("{:?}", out.dims());
+
+    let t: Tensor3<Wgpu, WgpuBestAvailableDevice, 10, 11, 12> = Tensor3::empty();
+    let t2: Tensor3<Wgpu, WgpuBestAvailableDevice, 10, 12, 13> = Tensor3::empty();
+    let out = t.matmul(t2);
+    println!("{:?}", out.dims());
 }
