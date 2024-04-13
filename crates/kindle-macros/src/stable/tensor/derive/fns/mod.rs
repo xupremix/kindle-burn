@@ -18,6 +18,7 @@ mod swap_dims;
 mod t_bool;
 mod t_float;
 mod transpose;
+mod var;
 
 pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) -> TokenStream {
     let ty_dims = (0..dim_val)
@@ -50,6 +51,7 @@ pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) ->
     }
     out.push(any_dim::derive_any_dim(dim_val, name, dims, &ty_dims));
     out.push(all_dim::derive_all_dim(dim_val, name, dims, &ty_dims));
+    out.push(var::derive_var(dim_val, name, dims, &ty_dims));
 
     quote! {
         #(#out)*
