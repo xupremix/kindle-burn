@@ -4,6 +4,7 @@ use quote::quote;
 #[cfg(feature = "autodiff")]
 mod autodiff;
 
+mod any_dim;
 mod base;
 mod cat;
 mod init;
@@ -46,6 +47,7 @@ pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) ->
         // Backends only provide matmul for tensors with dim > 1
         out.push(matmul::derive_matmul(dim_val, name, dims, &ty_dims));
     }
+    out.push(any_dim::derive_any_dim(dim_val, name, dims, &ty_dims));
 
     quote! {
         #(#out)*

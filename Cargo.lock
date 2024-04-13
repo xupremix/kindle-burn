@@ -221,6 +221,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "bstr"
+version = "1.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "05efc5cfd9110c8416e471df0e96702d58690178e206e61b7173706673c93706"
+dependencies = [
+ "memchr",
+ "serde",
+]
+
+[[package]]
 name = "bumpalo"
 version = "3.15.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -228,9 +238,9 @@ checksum = "7ff69b9dd49fd426c69a0db9fc04dd934cdb6645ff000864d98f7e2af8830eaa"
 
 [[package]]
 name = "burn"
-version = "0.12.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b6b703e5dae87b2146649b64af54688ff86e16cf69fd19d28c43c8f9656d7d7c"
+checksum = "e6c0ed4069416ef160c5cc893aecc657a49722a4a4295fb723c6ff3a05f17161"
 dependencies = [
  "burn-core",
  "burn-train",
@@ -238,21 +248,22 @@ dependencies = [
 
 [[package]]
 name = "burn-autodiff"
-version = "0.12.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f306e1b2e480fa0960c3130a68ca5e0fa54b3e33ed2fda7cf2121434703dd771"
+checksum = "17557c26c1cdd56bf90a54bb82979158019f3b03a086b40ac62fb75792cc7ea8"
 dependencies = [
  "burn-common",
  "burn-tensor",
  "derive-new",
+ "log",
  "spin",
 ]
 
 [[package]]
 name = "burn-candle"
-version = "0.12.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fc87b644a2d83cc1b7c05d1176e9e24fb6394272256ab9ab8324ff7c4fe0e6a0"
+checksum = "14403c2f73e714577a4547e954d07858a4c13e429746794b9d4273b919f6d4eb"
 dependencies = [
  "burn-tensor",
  "candle-core",
@@ -262,25 +273,28 @@ dependencies = [
 
 [[package]]
 name = "burn-common"
-version = "0.12.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1267068969f094323b62693df0c3b45d3b08a0568f3c3467e6a5c3207e6807c8"
+checksum = "2d6ddcaa76012e2715f143d439d4579362e06e8b2a4a8d236cfb07486f840f75"
 dependencies = [
  "async-trait",
  "derive-new",
  "getrandom",
+ "indicatif",
  "rand",
+ "reqwest",
  "serde",
  "spin",
+ "tokio",
  "uuid",
  "web-time",
 ]
 
 [[package]]
 name = "burn-compute"
-version = "0.12.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a1b51588cf7c84976f6241a9ac5f77857712b8bf443dab77296c260785033fe8"
+checksum = "90fbde921ff279f5f7627ccb66ed47aa2ad0f3ffc0562448a07889dc2c36767c"
 dependencies = [
  "burn-common",
  "derive-new",
@@ -296,9 +310,9 @@ dependencies = [
 
 [[package]]
 name = "burn-core"
-version = "0.12.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6b11d8fd1e8c656eee1a0bb503b798c4583904dcaf7a369cbb8fdfd3acc3d0ab"
+checksum = "7f98e5b4abcbf7b08bbaa2a78add64b1721db1f299af562393ff554b2a4914d7"
 dependencies = [
  "bincode",
  "burn-autodiff",
@@ -306,7 +320,6 @@ dependencies = [
  "burn-common",
  "burn-dataset",
  "burn-derive",
- "burn-fusion",
  "burn-ndarray",
  "burn-tch",
  "burn-tensor",
@@ -315,8 +328,8 @@ dependencies = [
  "flate2",
  "half",
  "hashbrown 0.14.3",
- "libm",
  "log",
+ "num-traits",
  "rand",
  "rmp-serde",
  "serde",
@@ -326,21 +339,21 @@ dependencies = [
 
 [[package]]
 name = "burn-dataset"
-version = "0.12.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c6050891281ae38ee9dc24d1d5badd084247717b15e3dcdae562a81456a41c6e"
+checksum = "52d015b7cbb755e6ff8061c57b1f073bbf0bcec51a6976f7085adaa94a70f6b2"
 dependencies = [
+ "burn-common",
  "csv",
  "derive-new",
  "dirs 5.0.1",
  "flate2",
  "gix-tempfile",
+ "globwalk",
  "image",
- "indicatif",
  "r2d2",
  "r2d2_sqlite",
  "rand",
- "reqwest",
  "rmp-serde",
  "rusqlite",
  "sanitize-filename",
@@ -351,14 +364,13 @@ dependencies = [
  "strum_macros",
  "tempfile",
  "thiserror",
- "tokio",
 ]
 
 [[package]]
 name = "burn-derive"
-version = "0.12.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "70f149de5f32baa3f2191c374edab71e5a323bade05eb6092c702aed76cdcb7b"
+checksum = "270f0e0d4e57d46e0e754e10c543a77b9503daa58e2c09f76ab1cc56a9c85e8e"
 dependencies = [
  "derive-new",
  "proc-macro2",
@@ -368,9 +380,9 @@ dependencies = [
 
 [[package]]
 name = "burn-fusion"
-version = "0.12.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f512f780beaefca46088c4e4a80595511fbc3b35545118281fbf49f1fca767b4"
+checksum = "aeb3c6ec86052f9ea82d5e978c6f7e09365359705fa512db5748564a9e4f8c9d"
 dependencies = [
  "burn-common",
  "burn-tensor",
@@ -382,10 +394,31 @@ dependencies = [
 ]
 
 [[package]]
-name = "burn-ndarray"
-version = "0.12.1"
+name = "burn-jit"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1aef9fb0b72a1c0a112ed51e35284fb663d3ba3fd98f3a3bfa32db39fd24ae4d"
+checksum = "3f30801b8a84f88bd49861ec9d70f4ad86e56340128a914c04c21d76e43e551e"
+dependencies = [
+ "burn-common",
+ "burn-compute",
+ "burn-fusion",
+ "burn-tensor",
+ "bytemuck",
+ "derive-new",
+ "hashbrown 0.14.3",
+ "log",
+ "num-traits",
+ "rand",
+ "serde",
+ "spin",
+ "text_placeholder",
+]
+
+[[package]]
+name = "burn-ndarray"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3b88fc2a1244f2dbd9df295b82b106232666848894f1e0b694bd3a60fa8582b7"
 dependencies = [
  "blas-src",
  "burn-autodiff",
@@ -404,9 +437,9 @@ dependencies = [
 
 [[package]]
 name = "burn-tch"
-version = "0.12.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3d7aec36d836c5a11714480089738120899e2c91f6fe2e23abd09ec4a68a803"
+checksum = "4fcbfdd03dcd9ac305e4b006595f35bfdfe030a01e79b2f1a58a9c7ad2db91ca"
 dependencies = [
  "burn-tensor",
  "half",
@@ -417,15 +450,14 @@ dependencies = [
 
 [[package]]
 name = "burn-tensor"
-version = "0.12.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ad09aeb0f2428a4ee91f9876a7d71cef6feb1fcacdab6389362dd878ec5f9b27"
+checksum = "6ac227ff0ff1e2ba2001795fdb76d011e33a952f4c9a9cd112207a23d4c43561"
 dependencies = [
  "burn-common",
  "derive-new",
  "half",
  "hashbrown 0.14.3",
- "libm",
  "num-traits",
  "rand",
  "rand_distr",
@@ -434,9 +466,9 @@ dependencies = [
 
 [[package]]
 name = "burn-train"
-version = "0.12.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dd5536e98b23dd5047728f288e61e8a4d9fbffef6f55086d3483c2464758508d"
+checksum = "451a711918eaa8a33fe0682f6fefd6bf77f34a0a9c6437e6d7f87a8b0c3590f4"
 dependencies = [
  "burn-core",
  "crossterm",
@@ -454,25 +486,21 @@ dependencies = [
 
 [[package]]
 name = "burn-wgpu"
-version = "0.12.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "231d2deb14a02838c29dd5e90d1a87a9578d76bda7b02d5c7a77e5440ef6ae95"
+checksum = "0a65a4ba31a4afb107a9a95e51636cc04f9b2a391f14210fb087f44fd05a1e91"
 dependencies = [
  "burn-common",
  "burn-compute",
  "burn-fusion",
+ "burn-jit",
  "burn-tensor",
  "bytemuck",
  "derive-new",
  "futures-intrusive",
  "hashbrown 0.14.3",
  "log",
- "num-traits",
  "pollster",
- "rand",
- "serde",
- "spin",
- "text_placeholder",
  "wgpu",
 ]
 
@@ -537,9 +565,9 @@ dependencies = [
 
 [[package]]
 name = "candle-core"
-version = "0.3.3"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6db8659ea87ee8197d2fc627348916cce0561330ee7ae3874e771691d3cecb2f"
+checksum = "6f1b20174c1707e20f4cb364a355b449803c03e9b0c9193324623cf9787a4e00"
 dependencies = [
  "accelerate-src",
  "byteorder",
@@ -564,18 +592,18 @@ dependencies = [
 
 [[package]]
 name = "candle-kernels"
-version = "0.3.3"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d80cdd5f1cc60d30ba61353cdba5accd0fbc4d4ef2fe707fcb5179a9821adbea"
+checksum = "5845911a44164ebb73b56a0e23793ba1b583bad102af7400fe4768babc5815b2"
 dependencies = [
  "bindgen_cuda",
 ]
 
 [[package]]
 name = "candle-metal-kernels"
-version = "0.3.3"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "52567e7a314ae0c59db5fbd4874ce461d99fa22adb22ddf7cf296b4d97035b40"
+checksum = "b20d6c0d49121e2709ed9faa958ba915ea59526036bcf27558817d1452a4ff09"
 dependencies = [
  "metal",
  "once_cell",
@@ -1434,6 +1462,30 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b"
 
 [[package]]
+name = "globset"
+version = "0.4.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57da3b9b5b85bd66f31093f8c408b90a74431672542466497dcbdfdc02034be1"
+dependencies = [
+ "aho-corasick",
+ "bstr",
+ "log",
+ "regex-automata",
+ "regex-syntax",
+]
+
+[[package]]
+name = "globwalk"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0bf760ebf69878d9fd8f110c89703d90ce35095324d1f1edcb595c63945ee757"
+dependencies = [
+ "bitflags 2.5.0",
+ "ignore",
+ "walkdir",
+]
+
+[[package]]
 name = "glow"
 version = "0.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1484,7 +1536,7 @@ dependencies = [
  "presser",
  "thiserror",
  "winapi",
- "windows",
+ "windows 0.51.1",
 ]
 
 [[package]]
@@ -1697,6 +1749,22 @@ checksum = "634d9b1461af396cad843f47fdba5597a4f9e6ddd4bfb6ff5d85028c25cb12f6"
 dependencies = [
  "unicode-bidi",
  "unicode-normalization",
+]
+
+[[package]]
+name = "ignore"
+version = "0.4.22"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b46810df39e66e925525d6e38ce1e7f6e1d208f72dc39757880fcb66e2c58af1"
+dependencies = [
+ "crossbeam-deque",
+ "globset",
+ "log",
+ "memchr",
+ "regex-automata",
+ "same-file",
+ "walkdir",
+ "winapi-util",
 ]
 
 [[package]]
@@ -3265,9 +3333,9 @@ dependencies = [
 
 [[package]]
 name = "sysinfo"
-version = "0.29.11"
+version = "0.30.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cd727fc423c2060f6c92d9534cef765c65a6ed3f428a03d7def74a8c4348e666"
+checksum = "26d7c217777061d5a2d652aea771fb9ba98b6dade657204b08c4b9604d11555b"
 dependencies = [
  "cfg-if",
  "core-foundation-sys",
@@ -3275,7 +3343,7 @@ dependencies = [
  "ntapi",
  "once_cell",
  "rayon",
- "winapi",
+ "windows 0.52.0",
 ]
 
 [[package]]
@@ -3480,9 +3548,9 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.36.0"
+version = "1.37.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "61285f6515fa018fb2d1e46eb21223fff441ee8db5d0f1435e8ab4f5cdb80931"
+checksum = "1adbebffeca75fcfd058afa480fb6c0b81e165a0323f9c9d39c9697e37c46787"
 dependencies = [
  "backtrace",
  "bytes",
@@ -4007,8 +4075,18 @@ version = "0.51.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ca229916c5ee38c2f2bc1e9d8f04df975b4bd93f9955dc69fabb5d91270045c9"
 dependencies = [
- "windows-core",
+ "windows-core 0.51.1",
  "windows-targets 0.48.5",
+]
+
+[[package]]
+name = "windows"
+version = "0.52.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e48a53791691ab099e5e2ad123536d0fff50652600abaf43bbf952894110d0be"
+dependencies = [
+ "windows-core 0.52.0",
+ "windows-targets 0.52.4",
 ]
 
 [[package]]
@@ -4018,6 +4096,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f1f8cf84f35d2db49a46868f947758c7a1138116f7fac3bc844f43ade1292e64"
 dependencies = [
  "windows-targets 0.48.5",
+]
+
+[[package]]
+name = "windows-core"
+version = "0.52.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "33ab640c8d7e35bf8ba19b884ba838ceb4fba93a4e8c65a9059d08afcfc683d9"
+dependencies = [
+ "windows-targets 0.52.4",
 ]
 
 [[package]]

@@ -16,14 +16,11 @@ pub trait Narrow<const DIM: usize, const START: usize, const LENGTH: usize> {
     fn narrow(self) -> Self::Output;
 }
 
-// Trait which allows for concatenating tensors along a dimension.
-// pub trait Cat<const DIM: usize, const N: usize, const SUM: usize> {
-//     const VALID: ();
-//     type Output;
-//     fn cat(tensors: &[Self; N]) -> Self::Output
-//     where
-//         Self: Sized;
-// }
+/// Trait which tests for an evaluation of True along a dimension
+pub trait AnyDim<const DIM: usize> {
+    type Output;
+    fn any_dim(self) -> Self::Output;
+}
 
 // Flatten
 // Reshape

@@ -103,6 +103,18 @@ pub(crate) fn derive_base(
                 }
             }
 
+            /// Applies element-wise not equal comparison and returns the respective boolean tensor.
+            pub fn not_equal(self, other: Self) -> #name<
+                Backend,
+                Device,
+                #(#ty_dims),*,
+                kindle_burn::tensor::Bool
+            > {
+                #name {
+                    tensor: self.tensor.not_equal(other.tensor),
+                    _device: std::marker::PhantomData,
+                }
+            }
         }
     }
 }
