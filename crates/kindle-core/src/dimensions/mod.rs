@@ -35,6 +35,11 @@ pub trait Variance<const DIM: usize> {
     fn var_mean_bias(self) -> (Self::Output, Self::Output);
 }
 
+pub trait Covariance<const DIM: usize> {
+    type Output;
+    fn cov(self, correction_factor: usize) -> Self::Output;
+}
+
 // Flatten
 // Reshape
 // Squeeze

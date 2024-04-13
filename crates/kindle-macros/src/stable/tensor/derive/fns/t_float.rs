@@ -183,6 +183,7 @@ pub(crate) fn derive_float(
                 }
             }
 
+            /// Return the tensor in a full precision backend
             pub fn into_full_precision(self) -> #name<
                 <Backend::FullPrecisionBridge as
                     kindle_burn::tensor::backend::BackendBridge<Backend>>::Target,
@@ -192,6 +193,30 @@ pub(crate) fn derive_float(
             > {
                 #name {
                     tensor: self.tensor.into_full_precision(),
+                    _device: std::marker::PhantomData,
+                }
+            }
+
+            /// Removes the tensor from the autodiff graph
+            pub fn detach(self) -> Self {
+                Self {
+                    tensor: self.tensor.detach(),
+                    _device: std::marker::PhantomData,
+                }
+            }
+
+            /// Marks the tensor as requiring gradient tracking
+            pub fn require_grad(self) -> Self {
+                Self {
+                    tensor: self.tensor.require_grad(),
+                    _device: std::marker::PhantomData,
+                }
+            }
+
+            /// Mark as untracked or tracked
+            pub fn set_require_grad(self, require_grad: bool) -> Self {
+                Self {
+                    tensor: self.tensor.set_require_grad(require_grad),
                     _device: std::marker::PhantomData,
                 }
             }

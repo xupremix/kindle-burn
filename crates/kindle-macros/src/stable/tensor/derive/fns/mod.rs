@@ -8,6 +8,7 @@ mod all_dim;
 mod any_dim;
 mod base;
 mod cat;
+mod cov;
 mod init;
 mod matmul;
 mod narrow;
@@ -48,6 +49,8 @@ pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) ->
     if dim_val > 1 {
         // Backends only provide matmul for tensors with dim > 1
         out.push(matmul::derive_matmul(dim_val, name, dims, &ty_dims));
+        // Covariance is only available for tensors with dim > 1
+        out.push(cov::derive_cov(dim_val, name, dims, &ty_dims));
     }
     out.push(any_dim::derive_any_dim(dim_val, name, dims, &ty_dims));
     out.push(all_dim::derive_all_dim(dim_val, name, dims, &ty_dims));
