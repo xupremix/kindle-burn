@@ -4,15 +4,13 @@ use kindle_burn::device::WgpuBestAvailableDevice;
 use kindle_burn::dimensions::Covariance;
 use kindle_burn::tensor::Tensor;
 
-define_tensor!(vis = pub, dim = 2);
+define_tensor!(vis = pub, dim = 4);
 
 fn main() {
-    let t = Tensor::<Wgpu, 1>::ones([10], &Default::default());
-    let cov = t.cov(0, 0);
-    println!("{:?}", cov.dims());
-
-    let cov: Tensor2<Wgpu, WgpuBestAvailableDevice, 1, 2> =
-        Tensor2::from_float_unchecked([[1.0; 2]; 1]);
-    let cov = Covariance::<0>::cov(cov, 0);
-    println!("{:?}", cov.dims());
+    let a: Tensor4<Wgpu, WgpuBestAvailableDevice, 1, 2, 3, 4> =
+        Tensor4::from_float_unchecked([[[[1.0; 4]; 3]; 2]; 1]);
+    let b: Tensor4<Wgpu, WgpuBestAvailableDevice, 1, 2, 4, 5> =
+        Tensor4::from_float_unchecked([[[[1.0; 5]; 4]; 2]; 1]);
+    let mul = a.matmul(b);
+    println!("{:?}", mul.dims());
 }

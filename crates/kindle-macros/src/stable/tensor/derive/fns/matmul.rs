@@ -7,7 +7,7 @@ pub(crate) fn derive_matmul(
     dims: &[TokenStream],
     ty_dims: &[TokenStream],
 ) -> TokenStream {
-    let new_dim = syn::Ident::new(&format!("DIM_{dim_val}"), proc_macro2::Span::call_site());
+    let new_dim = syn::Ident::new(&format!("I_DIM_{dim_val}"), proc_macro2::Span::call_site());
     let const_new_dim = quote! { const #new_dim: usize };
     let other_dims = {
         let mut out = ty_dims
@@ -20,7 +20,7 @@ pub(crate) fn derive_matmul(
         out
     };
     let mut new_dims = other_dims.clone();
-    new_dims[dim_val - 1] = quote! { #new_dim };
+    new_dims[dim_val - 2] = ty_dims[dim_val - 2].clone();
     quote! {
         impl <
             Backend,
