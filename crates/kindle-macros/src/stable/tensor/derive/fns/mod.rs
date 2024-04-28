@@ -13,6 +13,7 @@ mod init;
 mod matmul;
 mod narrow;
 mod one_hot;
+mod ops;
 mod repeat;
 mod slice;
 mod swap_dims;
@@ -55,6 +56,7 @@ pub(crate) fn derive(dim_val: usize, name: &syn::Ident, dims: &[TokenStream]) ->
     out.push(any_dim::derive_any_dim(dim_val, name, dims, &ty_dims));
     out.push(all_dim::derive_all_dim(dim_val, name, dims, &ty_dims));
     out.push(var::derive_var(dim_val, name, dims, &ty_dims));
+    out.push(ops::derive_ops(dim_val, name, dims, &ty_dims));
 
     quote! {
         #(#out)*

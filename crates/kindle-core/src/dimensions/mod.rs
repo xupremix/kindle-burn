@@ -28,6 +28,7 @@ pub trait AllDim<const DIM: usize> {
     fn all_dim(self) -> Self::Output;
 }
 
+/// Trait which allows the computation of the variance along a specific axis
 pub trait Variance<const DIM: usize> {
     type Output;
     fn var(self) -> Self::Output;
@@ -35,6 +36,7 @@ pub trait Variance<const DIM: usize> {
     fn var_mean_bias(self) -> (Self::Output, Self::Output);
 }
 
+/// Trait which allows the computation of the covariance along a specific axis
 pub trait Covariance<const DIM: usize> {
     type Output;
     fn cov(self, correction_factor: usize) -> Self::Output;
