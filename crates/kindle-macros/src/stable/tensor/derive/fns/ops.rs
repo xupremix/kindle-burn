@@ -117,6 +117,30 @@ pub(crate) fn derive_ops(
                     _device: std::marker::PhantomData,
                 }
             }
+
+            /// Creates a tensor full of ones
+            pub fn ones() -> Self {
+                let shape = [#(#ty_dims),*];
+                Self {
+                    tensor: kindle_burn::tensor::Tensor::<
+                        Backend, #dim_val, Kind
+                    >::ones(shape, &Device::to_device()),
+                    _device: std::marker::PhantomData,
+
+                }
+
+            }
+
+            /// Creates a tensor full of zeros
+            pub fn zeros() -> Self {
+                let shape = [#(#ty_dims),*];
+                Self {
+                    tensor: kindle_burn::tensor::Tensor::<
+                        Backend, #dim_val, Kind
+                    >::zeros(shape, &Device::to_device()),
+                    _device: std::marker::PhantomData,
+                }
+            }
         }
     }
 }
