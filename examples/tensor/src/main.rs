@@ -10,6 +10,5 @@ fn main() {
         Tensor4::from_float_unchecked([[[[1.0; 4]; 3]; 2]; 1]);
     let a2: Tensor4<Wgpu, WgpuBestAvailableDevice, 1, 2, 3, 4> =
         Tensor4::from_float_unchecked([[[[1.0; 4]; 3]; 2]; 1]);
-    let a3 = a.add(a2);
-    println!("{:?}", a3.to_data());
+    let a3 = a.neg();
 }
