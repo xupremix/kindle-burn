@@ -35,7 +35,7 @@ tch = ["burn/tch"]
 ndarray = ["burn/ndarray"]
 
 # Backend specs
-cuda = ["burn/cuda"]
+# cuda = ["burn/cuda"]
 metal = ["burn/metal"]
 # autotune = ["burn/autotune"]
 # template = ["burn/template"]
@@ -43,7 +43,7 @@ accelerate = ["burn/accelerate"]
 blas-netlib = ["burn/blas-netlib"]
 openblas = ["burn/openblas"]
 openblas-system = ["burn/openblas-system"]
-wasm-sync = ["burn/wasm-sync"]
+# wasm-sync = ["burn/wasm-sync"]
 
 # Backend decorators
 autodiff = ["burn/autodiff", "kindle-macros/autodiff"]

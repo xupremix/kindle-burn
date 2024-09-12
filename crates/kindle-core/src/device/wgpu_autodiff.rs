@@ -2,16 +2,16 @@ macro_rules! impl_device {
     ($device:ident, $device_variant:ident $(,$n:ident)?) => {
         impl<
             $(const $n: usize,)?
-            GraphicsApi,
+            // GraphicsApi,
             FloatElement,
             IntElement,
         >   crate::device::KindleDevice<
             crate::backend::Autodiff<
-                crate::backend::Wgpu<GraphicsApi, FloatElement, IntElement>,
+                crate::backend::Wgpu</* GraphicsApi,  */FloatElement, IntElement>,
             >
-        > for crate::device::$device <$($n,)? GraphicsApi, FloatElement, IntElement>
+        > for crate::device::$device <$($n,)? /* GraphicsApi, */ FloatElement, IntElement>
         where
-            GraphicsApi: crate::backend::wgpu::GraphicsApi,
+            // GraphicsApi: crate::backend::wgpu::GraphicsApi,
             FloatElement: crate::backend::wgpu::FloatElement,
             IntElement: crate::backend::wgpu::IntElement,
         {

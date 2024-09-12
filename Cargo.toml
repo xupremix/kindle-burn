@@ -49,12 +49,12 @@ ndarray = ["kindle-core/ndarray"]
 metal = ["kindle-core/metal"]
 # autotune = ["kindle-core/autotune"]
 # template = ["kindle-core/template"]
-cuda = ["kindle-core/cuda"]
+# cuda = ["kindle-core/cuda"]
 accelerate = ["kindle-core/accelerate"]
 blas-netlib = ["kindle-core/blas-netlib"]
 openblas = ["kindle-core/openblas"]
 openblas-system = ["kindle-core/openblas-system"]
-wasm-sync = ["kindle-core/wasm-sync"]
+# wasm-sync = ["kindle-core/wasm-sync"]
 
 # Network
 # network = ["kindle-core/network"]
@@ -71,14 +71,13 @@ path = "crates/kindle-core"
 version = "0.1.0"
 
 [workspace.dependencies]
-proc-macro2 = "1.0.81"
-quote = "1.0.36"
-syn = {version = "2.0.60", features = ["full"]}
-burn = "0.13.0"
-burn-fusion = "0.13.0"
-serde = {version = "1.0.198", features = ["derive"]}
-rustls = "0.23.5"
+proc-macro2 = "1.0.86"
+quote = "1.0.37"
+syn = {version = "2.0.77", features = ["full"]}
+burn = "0.14.0"
+burn-fusion = "0.14.0"
+serde = {version = "1.0.210", features = ["derive"]}
 
 # others
-darling = "0.20.8"
-trybuild = "1.0.91"
+darling = "0.20.10"
+trybuild = "1.0.99"
