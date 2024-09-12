@@ -34,11 +34,11 @@ pub(crate) fn derive_cat(
                     Kind,
                 >],
             ) -> Self {
-                _ = <kindle_burn::const_assert::Value as
+                <kindle_burn::const_assert::Value as
                     kindle_burn::const_assert::ConstValueBetween<
                         DIM, 0, #dim_val
                     >
-                >::validate();
+                >::VALID;
 
                 // check for the sum of dims
                 let ty_dim = [#(#ty_dims),*];

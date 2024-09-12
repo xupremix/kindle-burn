@@ -41,14 +41,14 @@ pub(crate) fn derive_narrow(
                     >;
                     #[doc = #doc]
                     fn narrow(self) -> Self::Output {
-                        _ = <kindle_burn::const_assert::Range as
+                        <kindle_burn::const_assert::Range as
                             kindle_burn::const_assert::ConstRange<
                                 0,
                                 #curr_dim,
                                 START,
                                 LENGTH,
                             >
-                        >::VALID;
+                        >::check();
                         #name {
                             tensor: self.tensor.narrow(#i, START, LENGTH),
                             _device: std::marker::PhantomData,
