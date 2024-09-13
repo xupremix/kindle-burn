@@ -24,18 +24,16 @@ pub(crate) fn derive_bool(
         {
             /// Creates a boolean tensor from the given data
             /// WARNING: panics if the dimensions provided do not match
-            pub fn from_bool_unchecked<Data>(
-                data: Data,
+            pub fn from_bool_unchecked<TensorData>(
+                data: TensorData,
             ) -> Self
             where
-                Data: Into<kindle_burn::tensor::Data<
-                    bool,
-                    #dim_val
-                >
-            > {
+                TensorData: Into<kindle_burn::tensor::TensorData>
+            {
                 let curr_dims = [#(#ty_dims),*];
                 let data = data.into();
-                for (dim, curr_dim) in data.shape.dims.iter().zip(curr_dims.iter()) {
+                // for (dim, curr_dim) in data.shape.dims.iter().zip(curr_dims.iter()) {
+                for (dim, curr_dim) in data.shape.iter().zip(curr_dims.iter()) {
                     assert_eq!(dim, curr_dim, "Expected dimension {} but got {}", curr_dim, dim);
                 }
                 Self {
@@ -50,6 +48,35 @@ pub(crate) fn derive_bool(
                     _device: std::marker::PhantomData,
                 }
             }
+
+
+            // pub fn from_bool_unchecked<Data>(
+            //     data: Data,
+            // ) -> Self
+            // where
+            //     Data: Into<kindle_burn::tensor::Data<
+            //         bool,
+            //         #dim_val
+            //     >
+            // > {
+            //     let curr_dims = [#(#ty_dims),*];
+            //     let data = data.into();
+            //     for (dim, curr_dim) in data.shape.dims.iter().zip(curr_dims.iter()) {
+            //         assert_eq!(dim, curr_dim, "Expected dimension {} but got {}", curr_dim, dim);
+            //     }
+            //     Self {
+            //         tensor: kindle_burn::tensor::Tensor::<
+            //             Backend,
+            //             #dim_val,
+            //             kindle_burn::tensor::Bool,
+            //         >::from_bool(
+            //             data,
+            //             &Device::to_device(),
+            //         ),
+            //         _device: std::marker::PhantomData,
+            //     }
+            // }
+
             /// Convert to a int tensor
             pub fn int(self) -> #name<
                 Backend,

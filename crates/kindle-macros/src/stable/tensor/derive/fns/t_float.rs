@@ -118,15 +118,12 @@ pub(crate) fn derive_float(
                 data: D
             ) -> Self
             where
-                D: Into<
-                    kindle_burn::tensor::Data<
-                        f32,
-                        #dim_val
-                    >
-            > {
+                D: Into<kindle_burn::tensor::TensorData>
+            {
                 let curr_dims = [#(#ty_dims),*];
                 let data = data.into();
-                for (dim, curr_dim) in data.shape.dims.iter().zip(curr_dims.iter()) {
+                // for (dim, curr_dim) in data.shape.dims.iter().zip(curr_dims.iter()) {
+                for (dim, curr_dim) in data.shape.iter().zip(curr_dims.iter()) {
                     assert_eq!(dim, curr_dim, "Expected dimension {} but got {}", curr_dim, dim);
                 }
                 Self {
@@ -141,6 +138,34 @@ pub(crate) fn derive_float(
                     _device: std::marker::PhantomData,
                 }
             }
+
+            // pub fn from_float_unchecked<D>(
+            //     data: D
+            // ) -> Self
+            // where
+            //     D: Into<
+            //         kindle_burn::tensor::Data<
+            //             f32,
+            //             #dim_val
+            //         >
+            // > {
+            //     let curr_dims = [#(#ty_dims),*];
+            //     let data = data.into();
+            //     for (dim, curr_dim) in data.shape.dims.iter().zip(curr_dims.iter()) {
+            //         assert_eq!(dim, curr_dim, "Expected dimension {} but got {}", curr_dim, dim);
+            //     }
+            //     Self {
+            //         tensor: kindle_burn::tensor::Tensor::<
+            //             Backend,
+            //             #dim_val,
+            //             kindle_burn::tensor::Float,
+            //         >::from_floats(
+            //             data,
+            //             &Device::to_device(),
+            //         ),
+            //         _device: std::marker::PhantomData,
+            //     }
+            // }
 
             /// Convert to an int tensor
             pub fn int(self) -> #name<

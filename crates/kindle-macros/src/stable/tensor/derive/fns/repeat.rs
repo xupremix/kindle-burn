@@ -19,9 +19,9 @@ pub(crate) fn derive_repeat(
                 })
                 .collect::<Vec<_>>();
             _ = new_const_dims.remove(i);
-            let mut new_ty_dims = ty_dims.iter().cloned().collect::<Vec<_>>();
+            let mut new_ty_dims = ty_dims.to_vec();
             new_ty_dims[i] = quote! { 1 };
-            let mut new_dims = ty_dims.iter().cloned().collect::<Vec<_>>();
+            let mut new_dims = ty_dims.to_vec();
             new_dims[i] = quote! { N };
             out.push(quote! {
                 impl <

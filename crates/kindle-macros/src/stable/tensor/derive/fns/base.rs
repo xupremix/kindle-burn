@@ -51,34 +51,38 @@ pub(crate) fn derive_base(
             }
 
             /// Returns the data of the tensor
-            pub fn into_data(self) -> kindle_burn::tensor::Data<
-                <Kind as kindle_burn::tensor::BasicOps<Backend>>::Elem,
-                #dim_val
-            > {
+            pub fn into_data(self) -> kindle_burn::tensor::TensorData {
                 self.tensor.into_data()
             }
+            // pub fn into_data(self) -> kindle_burn::tensor::Data<
+            //     <Kind as kindle_burn::tensor::BasicOps<Backend>>::Elem,
+            //     #dim_val
+            // > {
+            //     self.tensor.into_data()
+            // }
 
             /// Returns the data of the tensor without taking ownership.
-            pub fn to_data(&self) -> kindle_burn::tensor::Data<
-                <Kind as kindle_burn::tensor::BasicOps<Backend>>::Elem,
-                #dim_val
-            > {
+            pub fn to_data(&self) -> kindle_burn::tensor::TensorData {
                 self.tensor.to_data()
             }
+            // pub fn to_data(&self) -> kindle_burn::tensor::Data<
+            //     <Kind as kindle_burn::tensor::BasicOps<Backend>>::Elem,
+            //     #dim_val
+            // > {
+            //     self.tensor.to_data()
+            // }
 
             /// Creates a new tensor from the given data.
             ///
             /// WARNING: This function panics if the data doesn't match the dimensions provided.
-            pub fn from_data_unchecked<Data>(data: Data)-> Self
+            pub fn from_data_unchecked<TensorData>(data: TensorData)-> Self
             where
-                Data: Into<kindle_burn::tensor::Data<
-                    <Kind as kindle_burn::tensor::BasicOps<Backend>>::Elem,
-                    #dim_val
-                >
-            > {
+                TensorData: Into<kindle_burn::tensor::TensorData>
+            {
                 let curr_dims = [#(#ty_dims),*];
                 let data = data.into();
-                for (dim, curr_dim) in data.shape.dims.iter().zip(curr_dims.iter()) {
+                // for (dim, curr_dim) in data.shape.dims.iter().zip(curr_dims.iter()) {
+                for (dim, curr_dim) in data.shape.iter().zip(curr_dims.iter()) {
                     assert_eq!(dim, curr_dim, "Expected dimension {} but got {}", curr_dim, dim);
                 }
                 Self {
@@ -89,6 +93,27 @@ pub(crate) fn derive_base(
                     _device: std::marker::PhantomData,
                 }
             }
+
+            // pub fn from_data_unchecked<Data>(data: Data)-> Self
+            // where
+            //     Data: Into<kindle_burn::tensor::Data<
+            //         <Kind as kindle_burn::tensor::BasicOps<Backend>>::Elem,
+            //         #dim_val
+            //     >
+            // > {
+            //     let curr_dims = [#(#ty_dims),*];
+            //     let data = data.into();
+            //     for (dim, curr_dim) in data.shape.dims.iter().zip(curr_dims.iter()) {
+            //         assert_eq!(dim, curr_dim, "Expected dimension {} but got {}", curr_dim, dim);
+            //     }
+            //     Self {
+            //         tensor: kindle_burn::tensor::Tensor::from_data(
+            //             data,
+            //             &Device::to_device(),
+            //         ),
+            //         _device: std::marker::PhantomData,
+            //     }
+            // }
 
             /// Applies element-wise equal comparison and returns the respective boolean tensor.
             pub fn equal(self, other: Self) -> #name<
