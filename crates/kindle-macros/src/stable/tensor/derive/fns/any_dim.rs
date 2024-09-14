@@ -10,7 +10,7 @@ pub(crate) fn derive_any_dim(
     let any_dim_static_methods = {
         let mut out = vec![];
         for i in 0..dim_val {
-            let mut out_dims = ty_dims.iter().cloned().collect::<Vec<_>>();
+            let mut out_dims = ty_dims.to_vec();
             out_dims[i] = quote! { 1usize };
             out.push(quote! {
                 impl<

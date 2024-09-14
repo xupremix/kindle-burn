@@ -11,7 +11,7 @@ pub(crate) fn derive_narrow(
         let mut out = vec![];
         for i in 0..dim_val {
             let doc = format!("Narrows the tensor along dimension {i}");
-            let mut new_dims = ty_dims.iter().cloned().collect::<Vec<_>>();
+            let mut new_dims = ty_dims.to_vec();
             new_dims[i] = quote! { LENGTH };
             let curr_dim = syn::Ident::new(&format!("DIM_{i}"), proc_macro2::Span::call_site());
             out.push(quote! {

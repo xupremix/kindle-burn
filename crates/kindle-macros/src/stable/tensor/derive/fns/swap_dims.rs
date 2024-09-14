@@ -12,7 +12,7 @@ pub(crate) fn derive_switch_dims(
         for i in 0..dim_val {
             for j in i + 1..dim_val {
                 let doc = format!("Swaps dimensions {i} and {j} of the tensor.");
-                let mut new_dims = ty_dims.iter().collect::<Vec<_>>();
+                let mut new_dims = ty_dims.to_vec();
                 new_dims.swap(i, j);
                 out.push(quote! {
                     impl <

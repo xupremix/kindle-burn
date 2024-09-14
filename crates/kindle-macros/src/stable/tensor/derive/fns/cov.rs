@@ -10,7 +10,7 @@ pub(crate) fn derive_cov(
     let cov_static_methods = {
         let mut out = vec![];
         for i in 0..dim_val {
-            let mut out_dims = ty_dims.iter().cloned().collect::<Vec<_>>();
+            let mut out_dims = ty_dims.to_vec();
             out_dims.swap(i, 0);
             out_dims[dim_val - 2] = out_dims[dim_val - 1].clone();
             out.push(quote! {
