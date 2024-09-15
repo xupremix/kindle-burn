@@ -8,6 +8,6 @@ license.workspace = true
 [dependencies.kindle-burn]
 path = "../../"
 version = "0.1.0"
-features = ["std", "wgpu", "fusion", "candle", "ndarray"]
+features = ["std", "wgpu", "ndarray", "autodiff", "fusion"]
 
 [dependencies]

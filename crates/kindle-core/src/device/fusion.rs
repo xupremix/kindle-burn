@@ -13,7 +13,7 @@ pub struct KindleFusionDevice<Device> {
     _device: std::marker::PhantomData<Device>,
 }
 
-#[cfg(all(feature = "wgpu", not(feature = "autodiff")))]
+#[cfg(all(feature = "wgpu"))]
 impl<Device, FloatElement, IntElement>
     KindleDevice<Fusion<JitBackend<WgpuRuntime, FloatElement, IntElement>>>
     for KindleFusionDevice<Device>
